@@ -55,6 +55,9 @@ builder.Services.AddAntiforgery(opts => opts.HeaderName = "X-CSRF-TOKEN");
 
 var app = builder.Build();
 
+await RetalineProAgent.Services.DatabaseInitializer.InitializeAsync(
+    app.Configuration, app.Logger);
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");

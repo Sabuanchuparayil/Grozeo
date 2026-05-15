@@ -29,8 +29,12 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(string email, string password, string? returnUrl = null, bool rememberMe = false)
+    public async Task<IActionResult> Login(string email, string password, string? returnUrl = null, string? rememberMe = null)
     {
+        ModelState.Remove("rememberMe");
+        bool isPersistent = string.Equals(rememberMe, "true", StringComparison.OrdinalIgnoreCase)
+                         || string.Equals(rememberMe, "on", StringComparison.OrdinalIgnoreCase);
+
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
             ModelState.AddModelError("", "Email and password are required.");
@@ -58,8 +62,8 @@ public class AccountController : Controller
         var principal  = new ClaimsPrincipal(identity);
         var authProps  = new AuthenticationProperties
         {
-            IsPersistent = rememberMe,
-            ExpiresUtc   = rememberMe ? DateTimeOffset.UtcNow.AddDays(7) : DateTimeOffset.UtcNow.AddHours(8)
+            IsPersistent = isPersistent,
+            ExpiresUtc   = isPersistent ? DateTimeOffset.UtcNow.AddDays(7) : DateTimeOffset.UtcNow.AddHours(8)
         };
 
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProps);
