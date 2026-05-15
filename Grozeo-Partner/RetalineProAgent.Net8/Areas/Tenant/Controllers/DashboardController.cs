@@ -6,7 +6,7 @@ using RetalineProAgent.Services;
 namespace RetalineProAgent.Areas.Tenant.Controllers;
 
 [Area("Tenant")]
-[Authorize(Policy = "TenantAdmin")]
+[Authorize]
 public class DashboardController : Controller
 {
     private readonly IDataService _db;
@@ -83,17 +83,13 @@ public class DashboardController : Controller
 
     public IActionResult Analytics(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Tenant", "Dashboard", "Analytics");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 
     public IActionResult StoreCompletion(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Tenant", "Dashboard", "StoreCompletion");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 }

@@ -65,6 +65,8 @@ public class AccountController : Controller
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProps);
         _logger.LogInformation("User {Email} logged in", email);
 
+        TempData["Success"] = $"Welcome back, {user.usr_name}!";
+
         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             return Redirect(returnUrl);
 

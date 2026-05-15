@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RetalineProAgent.Services;
 
 namespace RetalineProAgent.Areas.Business.Controllers;
 
@@ -8,14 +7,6 @@ namespace RetalineProAgent.Areas.Business.Controllers;
 [Authorize(Policy = "TenantAdmin")]
 public class AssociateController : Controller
 {
-    private readonly IDataService _db;
-    private readonly ILogger<AssociateController> _logger;
-
-    public AssociateController(IDataService db, ILogger<AssociateController> logger)
-    {
-        _db = db;
-        _logger = logger;
-    }
 
     public IActionResult Index(int? id)
     {
@@ -24,25 +15,19 @@ public class AssociateController : Controller
 
     public IActionResult Create(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Business", "Associate", "Create");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 
     public IActionResult Edit(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Business", "Associate", "Edit");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 
     public IActionResult Commission(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Business", "Associate", "Commission");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 }

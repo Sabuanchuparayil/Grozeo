@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RetalineProAgent.Services;
 
 namespace RetalineProAgent.Areas.Fleet.Controllers;
 
@@ -8,14 +7,6 @@ namespace RetalineProAgent.Areas.Fleet.Controllers;
 [Authorize(Policy = "TenantAdmin")]
 public class VehicleController : Controller
 {
-    private readonly IDataService _db;
-    private readonly ILogger<VehicleController> _logger;
-
-    public VehicleController(IDataService db, ILogger<VehicleController> logger)
-    {
-        _db = db;
-        _logger = logger;
-    }
 
     public IActionResult Index(int? id)
     {
@@ -24,25 +15,19 @@ public class VehicleController : Controller
 
     public IActionResult Create(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Fleet", "Vehicle", "Create");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 
     public IActionResult Edit(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Fleet", "Vehicle", "Edit");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 
     public IActionResult History(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Fleet", "Vehicle", "History");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 }

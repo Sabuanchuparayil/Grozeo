@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RetalineProAgent.Services;
 
 namespace RetalineProAgent.Areas.Operation.Controllers;
 
@@ -8,14 +7,6 @@ namespace RetalineProAgent.Areas.Operation.Controllers;
 [Authorize(Policy = "TenantAdmin")]
 public class MonitoringController : Controller
 {
-    private readonly IDataService _db;
-    private readonly ILogger<MonitoringController> _logger;
-
-    public MonitoringController(IDataService db, ILogger<MonitoringController> logger)
-    {
-        _db = db;
-        _logger = logger;
-    }
 
     public IActionResult Index(int? id)
     {
@@ -24,25 +15,19 @@ public class MonitoringController : Controller
 
     public IActionResult PackingDelays(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Operation", "Monitoring", "PackingDelays");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 
     public IActionResult DeliveryDelays(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Operation", "Monitoring", "DeliveryDelays");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 
     public IActionResult LiveOrders(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Operation", "Monitoring", "LiveOrders");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        TempData["Info"] = "This feature is coming soon.";
+        return RedirectToAction("Index");
     }
 }
