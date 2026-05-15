@@ -9,10 +9,15 @@ RUN apk add --no-cache \
     oniguruma-dev \
     curl-dev \
     supervisor \
+    autoconf \
+    gcc \
+    g++ \
+    make \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql gd zip intl mbstring bcmath opcache pcntl
 
-RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install redis && docker-php-ext-enable redis \
+    && apk del autoconf gcc g++ make
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
