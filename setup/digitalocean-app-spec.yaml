@@ -1,0 +1,164 @@
+name: grozeo-platform
+region: blr
+
+services:
+  - name: bizapi
+    dockerfile_path: Grozeo-Bizapi/Dockerfile
+    source_dir: /Grozeo-Bizapi
+    github:
+      repo: YOUR_ORG/Grozeo-Bizapi
+      branch: main
+      deploy_on_push: true
+    http_port: 80
+    instance_count: 1
+    instance_size_slug: professional-xs
+    health_check:
+      http_path: /health/ping
+      initial_delay_seconds: 30
+      period_seconds: 30
+      timeout_seconds: 5
+    envs:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        value: ""
+        type: SECRET
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: ${db.HOSTNAME}
+      - key: DB_PORT
+        value: ${db.PORT}
+      - key: DB_DATABASE
+        value: ${db.DATABASE}
+      - key: DB_USERNAME
+        value: ${db.USERNAME}
+      - key: DB_PASSWORD
+        value: ${db.PASSWORD}
+        type: SECRET
+      - key: REDIS_HOST
+        value: ${redis.HOSTNAME}
+      - key: REDIS_PORT
+        value: ${redis.PORT}
+      - key: REDIS_PASSWORD
+        value: ${redis.PASSWORD}
+        type: SECRET
+      - key: CACHE_DRIVER
+        value: redis
+      - key: QUEUE_CONNECTION
+        value: redis
+      - key: SESSION_DRIVER
+        value: redis
+      - key: JWT_SECRET
+        value: ""
+        type: SECRET
+    routes:
+      - path: /api
+
+  - name: scheduler
+    dockerfile_path: Grozeo-Scheduler/Dockerfile
+    source_dir: /Grozeo-Scheduler
+    github:
+      repo: YOUR_ORG/Grozeo-Scheduler
+      branch: main
+      deploy_on_push: true
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: professional-xs
+    envs:
+      - key: APP_ENV
+        value: production
+      - key: DB_HOST
+        value: ${db.HOSTNAME}
+      - key: DB_PORT
+        value: ${db.PORT}
+      - key: DB_DATABASE
+        value: ${db.DATABASE}
+      - key: DB_USERNAME
+        value: ${db.USERNAME}
+      - key: DB_PASSWORD
+        value: ${db.PASSWORD}
+        type: SECRET
+      - key: REDIS_HOST
+        value: ${redis.HOSTNAME}
+      - key: REDIS_PORT
+        value: ${redis.PORT}
+      - key: REDIS_PASSWORD
+        value: ${redis.PASSWORD}
+        type: SECRET
+
+  - name: public
+    dockerfile_path: Grozeo-Public/Dockerfile
+    source_dir: /Grozeo-Public
+    github:
+      repo: YOUR_ORG/Grozeo-Public
+      branch: main
+      deploy_on_push: true
+    http_port: 5000
+    instance_count: 1
+    instance_size_slug: professional-xs
+    health_check:
+      http_path: /Health/ping
+      initial_delay_seconds: 15
+      period_seconds: 30
+      timeout_seconds: 5
+    envs:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:5000
+    routes:
+      - path: /
+
+  - name: partner
+    dockerfile_path: Grozeo-Partner/Dockerfile
+    source_dir: /Grozeo-Partner
+    github:
+      repo: YOUR_ORG/Grozeo-Partner
+      branch: main
+      deploy_on_push: true
+    http_port: 5001
+    instance_count: 1
+    instance_size_slug: professional-xs
+    envs:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:5001
+
+  - name: bizadmin
+    dockerfile_path: Grozeo-Bizadmin/Dockerfile
+    source_dir: /Grozeo-Bizadmin
+    github:
+      repo: YOUR_ORG/Grozeo-Bizadmin
+      branch: main
+      deploy_on_push: true
+    http_port: 80
+    instance_count: 1
+    instance_size_slug: basic-xxs
+
+  - name: manage-products
+    dockerfile_path: Manage-Products/Dockerfile
+    source_dir: /Manage-Products
+    github:
+      repo: YOUR_ORG/Manage-Products
+      branch: main
+      deploy_on_push: true
+    http_port: 80
+    instance_count: 1
+    instance_size_slug: basic-xxs
+
+databases:
+  - name: db
+    engine: MYSQL
+    version: "8"
+    size: db-s-1vcpu-1gb
+    num_nodes: 1
+
+  - name: redis
+    engine: REDIS
+    version: "7"
+    size: db-s-1vcpu-1gb
+    num_nodes: 1

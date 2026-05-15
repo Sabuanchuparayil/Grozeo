@@ -1,0 +1,59 @@
+name: Legacy PHP CI
+
+on:
+  push:
+    branches: [main, develop, staging]
+    paths:
+      - 'Grozeo-Bizadmin/**'
+      - 'Manage-Products/**'
+      - '.github/workflows/legacy-php-ci.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'Grozeo-Bizadmin/**'
+      - 'Manage-Products/**'
+
+jobs:
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner (Bizadmin)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: 'Grozeo-Bizadmin'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'
+
+      - name: Run Trivy vulnerability scanner (Manage-Products)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: 'Manage-Products'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'
+
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [Grozeo-Bizadmin, Manage-Products]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build ${{ matrix.service }} Docker image
+        run: |
+          docker build -t grozeo-${{ matrix.service }}:${{ github.sha }} ${{ matrix.service }}/
+
+      - name: Verify container starts
+        run: |
+          docker run -d --name test-${{ matrix.service }} \
+            -e APACHE_PORT=80 \
+            grozeo-${{ matrix.service }}:${{ github.sha }}
+          sleep 10
+          docker logs test-${{ matrix.service }}
+          docker stop test-${{ matrix.service }}

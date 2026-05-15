@@ -1,0 +1,35 @@
+# Deny access to sensitive files and directories
+<FilesMatch "\.(env|log|sql|bak)$">
+    Require all denied
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always unset X-Powered-By
+</IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Block access to sensitive directories
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^finascop_config/ - [F,L]
+RewriteRule ^schedule/ - [F,L]
+RewriteRule ^logs/ - [F,L]
+
+# Health check endpoint
+RewriteRule ^health$ index.php?module=health [QSA,NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule qugeoapi/(.*)$ qugeoapi/qugeoapibase.php?request=$1 [QSA,NC,L]
+RewriteRule finascopapi/(.*)$ finascopapi/finascopapibase.php?request=$1 [QSA,NC,L]
+RewriteRule partnerapi/(.*)$ partnerapi/partnerapibase.php?request=$1 [QSA,NC,L]
+</IfModule>  

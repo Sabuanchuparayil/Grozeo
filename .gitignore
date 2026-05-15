@@ -1,0 +1,90 @@
+# Dependencies
+node_modules/
+vendor/
+.pnp
+.pnp.js
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Build outputs
+/build
+/dist
+/out
+*.dll
+*.exe
+*.pdb
+bin/
+obj/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output
+*.lcov
+
+# Cache
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.turbo
+
+# PHP specific
+composer.phar
+/storage/*.key
+/storage/logs/*
+!/storage/logs/.gitkeep
+bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
+
+# .NET specific
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+project.lock.json
+*.nupkg
+*.snupkg
+
+# Docker
+docker-compose.override.yml
+
+# SSL certificates (keep placeholder)
+setup/ssl/*.key
+setup/ssl/*.crt
+setup/ssl/*.pem
+!setup/ssl/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Database dumps (keep seeds)
+*.sql
+!setup/*.sql
+
+# Composer setup (temporary)
+composer-setup.php

@@ -1,0 +1,252 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      service:
+        description: 'Service to deploy'
+        required: true
+        type: choice
+        options:
+          - bizapi
+          - scheduler
+          - public
+          - partner
+          - bizadmin
+          - manage-products
+          - finascop
+          - all
+
+env:
+  REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+
+jobs:
+  deploy-bizapi:
+    name: Deploy Bizapi
+    runs-on: ubuntu-latest
+    if: inputs.service == 'bizapi' || inputs.service == 'all'
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        working-directory: Grozeo-Bizapi
+        run: |
+          docker build -t ${{ env.REGISTRY }}/grozeo-bizapi:${{ github.sha }} .
+          docker tag ${{ env.REGISTRY }}/grozeo-bizapi:${{ github.sha }} ${{ env.REGISTRY }}/grozeo-bizapi:latest
+
+      - name: Run pre-deploy checks
+        working-directory: Grozeo-Bizapi
+        run: |
+          echo "Running config validation..."
+          docker run --rm \
+            -e APP_KEY=${{ secrets.APP_KEY }} \
+            -e DB_HOST=${{ secrets.DB_HOST }} \
+            -e DB_DATABASE=${{ secrets.DB_DATABASE }} \
+            -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            ${{ env.REGISTRY }}/grozeo-bizapi:${{ github.sha }} \
+            php artisan config:cache
+
+      - name: Push Docker image
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ env.REGISTRY }}/grozeo-bizapi:${{ github.sha }}
+          docker push ${{ env.REGISTRY }}/grozeo-bizapi:latest
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/grozeo
+            docker compose pull bizapi
+            docker compose up -d bizapi
+            docker exec grozeo-bizapi php artisan migrate --force
+            docker exec grozeo-bizapi php artisan config:cache
+            docker exec grozeo-bizapi php artisan route:cache
+            docker exec grozeo-bizapi php artisan queue:restart
+
+  deploy-scheduler:
+    name: Deploy Scheduler
+    runs-on: ubuntu-latest
+    if: inputs.service == 'scheduler' || inputs.service == 'all'
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & Push
+        working-directory: Grozeo-Scheduler
+        run: |
+          docker build -t ${{ env.REGISTRY }}/grozeo-scheduler:${{ github.sha }} .
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ env.REGISTRY }}/grozeo-scheduler:${{ github.sha }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/grozeo
+            docker compose pull scheduler
+            docker compose up -d scheduler
+
+  deploy-public:
+    name: Deploy Public Site
+    runs-on: ubuntu-latest
+    if: inputs.service == 'public' || inputs.service == 'all'
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & Push
+        working-directory: Grozeo-Public
+        run: |
+          docker build -t ${{ env.REGISTRY }}/grozeo-public:${{ github.sha }} .
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ env.REGISTRY }}/grozeo-public:${{ github.sha }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/grozeo
+            docker compose pull public
+            docker compose up -d public
+
+  deploy-partner:
+    name: Deploy Partner Portal
+    runs-on: ubuntu-latest
+    if: inputs.service == 'partner' || inputs.service == 'all'
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & Push
+        working-directory: Grozeo-Partner
+        run: |
+          docker build -t ${{ env.REGISTRY }}/grozeo-partner:${{ github.sha }} .
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ env.REGISTRY }}/grozeo-partner:${{ github.sha }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/grozeo
+            docker compose pull partner
+            docker compose up -d partner
+
+  deploy-bizadmin:
+    name: Deploy Bizadmin
+    runs-on: ubuntu-latest
+    if: inputs.service == 'bizadmin' || inputs.service == 'all'
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & Push
+        working-directory: Grozeo-Bizadmin
+        run: |
+          docker build -t ${{ env.REGISTRY }}/grozeo-bizadmin:${{ github.sha }} .
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ env.REGISTRY }}/grozeo-bizadmin:${{ github.sha }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/grozeo
+            docker compose pull bizadmin
+            docker compose up -d bizadmin
+
+  deploy-manage-products:
+    name: Deploy Manage Products
+    runs-on: ubuntu-latest
+    if: inputs.service == 'manage-products' || inputs.service == 'all'
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & Push
+        working-directory: Manage-Products
+        run: |
+          docker build -t ${{ env.REGISTRY }}/grozeo-manage-products:${{ github.sha }} .
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ env.REGISTRY }}/grozeo-manage-products:${{ github.sha }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/grozeo
+            docker compose pull manage-products
+            docker compose up -d manage-products
+
+  deploy-finascop:
+    name: Deploy Finascop
+    runs-on: ubuntu-latest
+    if: inputs.service == 'finascop' || inputs.service == 'all'
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & Push
+        working-directory: finascop
+        run: |
+          docker build -t ${{ env.REGISTRY }}/grozeo-finascop:${{ github.sha }} .
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ env.REGISTRY }}/grozeo-finascop:${{ github.sha }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/grozeo
+            docker compose pull finascop
+            docker compose up -d finascop
+
+  post-deploy:
+    name: Post-Deploy Verification
+    runs-on: ubuntu-latest
+    needs: [deploy-bizapi, deploy-scheduler, deploy-public, deploy-partner, deploy-bizadmin, deploy-manage-products, deploy-finascop]
+    if: always() && (needs.deploy-bizapi.result == 'success' || needs.deploy-public.result == 'success')
+    steps:
+      - name: Health check
+        run: |
+          sleep 30
+          HEALTH_URL="${{ secrets.BIZAPI_URL }}/health/ping"
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" || echo "000")
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Health check failed with HTTP $HTTP_CODE"
+            exit 1
+          fi
+          echo "Health check passed"

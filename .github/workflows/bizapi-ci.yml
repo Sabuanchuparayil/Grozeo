@@ -1,0 +1,156 @@
+name: Bizapi CI
+
+on:
+  push:
+    branches: [main, develop, staging]
+    paths:
+      - 'Grozeo-Bizapi/**'
+      - '.github/workflows/bizapi-ci.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'Grozeo-Bizapi/**'
+
+defaults:
+  run:
+    working-directory: Grozeo-Bizapi
+
+jobs:
+  lint:
+    name: Code Style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: Grozeo-Bizapi/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('Grozeo-Bizapi/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run Pint (code style)
+        run: vendor/bin/pint --test
+
+  test:
+    name: Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.1', '8.2']
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: grozeo_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo, pdo_mysql, redis
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: Grozeo-Bizapi/vendor
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('Grozeo-Bizapi/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Copy env file
+        run: cp .env.example .env
+
+      - name: Generate app key
+        run: php artisan key:generate
+
+      - name: Run tests
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: grozeo_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
+          JWT_SECRET: test-jwt-secret-for-ci
+          CACHE_DRIVER: array
+          QUEUE_CONNECTION: sync
+          SESSION_DRIVER: array
+        run: vendor/bin/phpunit --testdox --colors=always
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Check for known vulnerabilities
+        run: composer audit
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t grozeo-bizapi:${{ github.sha }} .
+
+      - name: Verify container starts
+        run: |
+          docker run -d --name bizapi-test \
+            -e APP_KEY=base64:dGVzdGtleWZvcmNp \
+            -e DB_HOST=localhost \
+            -e REDIS_HOST=localhost \
+            grozeo-bizapi:${{ github.sha }}
+          sleep 5
+          docker logs bizapi-test
+          docker stop bizapi-test

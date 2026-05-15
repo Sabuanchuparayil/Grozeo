@@ -1,0 +1,14 @@
+{
+    "name": "grozeo/laravel-common",
+    "description": "Shared Laravel components for Grozeo Bizapi and Scheduler services",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Grozeo\\Common\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^10.0"
+    }
+}
