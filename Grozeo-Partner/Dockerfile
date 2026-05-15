@@ -16,11 +16,12 @@ RUN apk add --no-cache curl
 
 COPY --from=build /app/publish .
 
-ENV ASPNETCORE_URLS=http://+:5001
 ENV ASPNETCORE_ENVIRONMENT=Production
-EXPOSE 5001
+ENV PORT=5001
+ENV ASPNETCORE_URLS=http://+:${PORT}
+EXPOSE ${PORT}
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD curl -f http://localhost:5001/health || exit 1
+    CMD curl -f http://localhost:${PORT}/health || exit 1
 
 ENTRYPOINT ["dotnet", "RetalineProAgent.dll"]
