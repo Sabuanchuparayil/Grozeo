@@ -1,0 +1,33 @@
+# Dependencies - will be installed during build
+vendor/
+node_modules/
+
+# Testing
+tests/
+phpunit.xml
+.phpunit.result.cache
+
+# Development
+.env.example
+.env.testing
+docker/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Logs
+storage/logs/*
+!storage/logs/.gitkeep
+
+# Cache
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
