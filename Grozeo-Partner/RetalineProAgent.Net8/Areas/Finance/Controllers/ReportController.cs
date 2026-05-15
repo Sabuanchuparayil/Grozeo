@@ -17,6 +17,11 @@ public class ReportController : Controller
         _logger = logger;
     }
 
+    public IActionResult Index(int? id)
+    {
+        return View();
+    }
+
     public IActionResult Sales(int? id)
     {
         _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Finance", "Report", "Sales");

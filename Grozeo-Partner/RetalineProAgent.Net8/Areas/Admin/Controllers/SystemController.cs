@@ -17,6 +17,11 @@ public class SystemController : Controller
         _logger = logger;
     }
 
+    public IActionResult Index(int? id)
+    {
+        return View();
+    }
+
     public IActionResult Jobs(int? id)
     {
         _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Admin", "System", "Jobs");

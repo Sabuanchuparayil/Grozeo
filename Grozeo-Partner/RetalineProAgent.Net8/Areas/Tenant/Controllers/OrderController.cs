@@ -19,10 +19,7 @@ public class OrderController : Controller
 
     public IActionResult Index(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Tenant", "Order", "Index");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        return View();
     }
 
     public IActionResult Details(int? id)

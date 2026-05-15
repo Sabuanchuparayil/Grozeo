@@ -19,10 +19,7 @@ public class CostCentreController : Controller
 
     public IActionResult Index(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Finance", "CostCentre", "Index");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        return View();
     }
 
     public IActionResult Entry(int? id)

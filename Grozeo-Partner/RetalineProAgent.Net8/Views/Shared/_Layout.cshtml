@@ -1,3 +1,7 @@
+@{
+    var area = ViewContext.RouteData.Values["area"]?.ToString() ?? "";
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,38 +9,364 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] — Grozeo Partner</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <nav class="sidebar">
-        <div class="brand">
-            <a href="/Tenant/Dashboard">
-                <img src="~/images/grozeo-logo.svg" alt="Grozeo" />
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <a asp-area="Tenant" asp-controller="Dashboard" asp-action="Index">
+                <span class="brand-icon"><i class="bi bi-box-seam-fill"></i></span>
+                <span class="brand-text">Grozeo</span>
             </a>
+            <button class="sidebar-close d-lg-none" id="sidebarClose" type="button" aria-label="Close sidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
         </div>
-        <ul class="nav-menu">
-            <li><a asp-area="Tenant"    asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
-            <li><a asp-area="Tenant"    asp-controller="Order"     asp-action="Index">Orders</a></li>
-            <li><a asp-area="Tenant"    asp-controller="Product"   asp-action="Index">Products</a></li>
-            <li><a asp-area="Tenant"    asp-controller="Inventory" asp-action="Index">Inventory</a></li>
-            <li><a asp-area="Finance"   asp-controller="Settlement" asp-action="Index">Finance</a></li>
-            <li><a asp-area="Business"  asp-controller="CRM"       asp-action="Prospects">Business</a></li>
-            <li><a asp-area="Support"   asp-controller="Ticket"    asp-action="Index">Support</a></li>
-        </ul>
-        <div class="user-info">
-            <span>@User.Identity?.Name</span>
-            <form asp-area="Account" asp-controller="Account" asp-action="Logout" method="post">
-                @Html.AntiForgeryToken()
-                <button type="submit">Sign out</button>
-            </form>
+
+        <nav class="sidebar-nav" id="sidebarNav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a class="nav-link @(area == "Tenant" && controller == "Dashboard" ? "active" : "")"
+                       asp-area="Tenant" asp-controller="Dashboard" asp-action="Index">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+
+            @if (User.IsInRole("TenantAdmin") || User.IsInRole("SuperAdmin"))
+            {
+                <div class="nav-section-label">Tenant</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Tenant" && controller == "Order" ? "active" : "")"
+                           asp-area="Tenant" asp-controller="Order" asp-action="Index">
+                            <i class="bi bi-receipt"></i>
+                            <span>Orders</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Tenant" && controller == "Product" ? "active" : "")"
+                           asp-area="Tenant" asp-controller="Product" asp-action="Index">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Tenant" && controller == "Inventory" ? "active" : "")"
+                           asp-area="Tenant" asp-controller="Inventory" asp-action="Index">
+                            <i class="bi bi-archive"></i>
+                            <span>Inventory</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Tenant" && controller == "Store" ? "active" : "")"
+                           asp-area="Tenant" asp-controller="Store" asp-action="Index">
+                            <i class="bi bi-shop"></i>
+                            <span>Store Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Tenant" && controller == "Delivery" ? "active" : "")"
+                           asp-area="Tenant" asp-controller="Delivery" asp-action="Index">
+                            <i class="bi bi-truck"></i>
+                            <span>Delivery</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Tenant" && controller == "Campaign" ? "active" : "")"
+                           asp-area="Tenant" asp-controller="Campaign" asp-action="Index">
+                            <i class="bi bi-megaphone"></i>
+                            <span>Campaigns</span>
+                        </a>
+                    </li>
+                </ul>
+            }
+
+            @if (User.IsInRole("Finance") || User.IsInRole("TenantAdmin") || User.IsInRole("SuperAdmin"))
+            {
+                <div class="nav-section-label">Finance</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Finance" && controller == "Settlement" ? "active" : "")"
+                           asp-area="Finance" asp-controller="Settlement" asp-action="Index">
+                            <i class="bi bi-bank"></i>
+                            <span>Settlements</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Finance" && controller == "Report" ? "active" : "")"
+                           asp-area="Finance" asp-controller="Report" asp-action="Index">
+                            <i class="bi bi-bar-chart-line"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Finance" && controller == "Ledger" ? "active" : "")"
+                           asp-area="Finance" asp-controller="Ledger" asp-action="Index">
+                            <i class="bi bi-journal-text"></i>
+                            <span>Ledger</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Finance" && controller == "Voucher" ? "active" : "")"
+                           asp-area="Finance" asp-controller="Voucher" asp-action="Index">
+                            <i class="bi bi-ticket-perforated"></i>
+                            <span>Vouchers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Finance" && controller == "CostCentre" ? "active" : "")"
+                           asp-area="Finance" asp-controller="CostCentre" asp-action="Index">
+                            <i class="bi bi-diagram-3"></i>
+                            <span>Cost Centres</span>
+                        </a>
+                    </li>
+                </ul>
+            }
+
+            @if (User.IsInRole("TenantAdmin") || User.IsInRole("SuperAdmin"))
+            {
+                <div class="nav-section-label">Business</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Business" && controller == "CRM" ? "active" : "")"
+                           asp-area="Business" asp-controller="CRM" asp-action="Index">
+                            <i class="bi bi-people"></i>
+                            <span>CRM</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Business" && controller == "Associate" ? "active" : "")"
+                           asp-area="Business" asp-controller="Associate" asp-action="Index">
+                            <i class="bi bi-person-badge"></i>
+                            <span>Associates</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Business" && controller == "AreaManager" ? "active" : "")"
+                           asp-area="Business" asp-controller="AreaManager" asp-action="Index">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>Area Managers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Business" && controller == "RO" ? "active" : "")"
+                           asp-area="Business" asp-controller="RO" asp-action="Index">
+                            <i class="bi bi-pin-map"></i>
+                            <span>Regional Officers</span>
+                        </a>
+                    </li>
+                </ul>
+            }
+
+            @if (User.IsInRole("TenantAdmin") || User.IsInRole("SuperAdmin"))
+            {
+                <div class="nav-section-label">Marketing</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Marketing" && controller == "Campaigns" ? "active" : "")"
+                           asp-area="Marketing" asp-controller="Campaigns" asp-action="Index">
+                            <i class="bi bi-bullseye"></i>
+                            <span>Campaigns</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Marketing" && controller == "Leads" ? "active" : "")"
+                           asp-area="Marketing" asp-controller="Leads" asp-action="Index">
+                            <i class="bi bi-funnel"></i>
+                            <span>Leads</span>
+                        </a>
+                    </li>
+                </ul>
+            }
+
+            @if (User.IsInRole("TenantAdmin") || User.IsInRole("SuperAdmin"))
+            {
+                <div class="nav-section-label">Fleet</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Fleet" && controller == "Vehicle" ? "active" : "")"
+                           asp-area="Fleet" asp-controller="Vehicle" asp-action="Index">
+                            <i class="bi bi-truck-front"></i>
+                            <span>Vehicles</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Fleet" && controller == "Driver" ? "active" : "")"
+                           asp-area="Fleet" asp-controller="Driver" asp-action="Index">
+                            <i class="bi bi-person-vcard"></i>
+                            <span>Drivers</span>
+                        </a>
+                    </li>
+                </ul>
+            }
+
+            @if (User.IsInRole("Support") || User.IsInRole("TenantAdmin") || User.IsInRole("SuperAdmin"))
+            {
+                <div class="nav-section-label">Support</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Support" && controller == "Ticket" ? "active" : "")"
+                           asp-area="Support" asp-controller="Ticket" asp-action="Index">
+                            <i class="bi bi-headset"></i>
+                            <span>Tickets</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Support" && controller == "Knowledge" ? "active" : "")"
+                           asp-area="Support" asp-controller="Knowledge" asp-action="Index">
+                            <i class="bi bi-book"></i>
+                            <span>Knowledge Base</span>
+                        </a>
+                    </li>
+                </ul>
+            }
+
+            @if (User.IsInRole("TenantAdmin") || User.IsInRole("SuperAdmin"))
+            {
+                <div class="nav-section-label">Operations</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Operation" && controller == "Monitoring" ? "active" : "")"
+                           asp-area="Operation" asp-controller="Monitoring" asp-action="Index">
+                            <i class="bi bi-activity"></i>
+                            <span>Monitoring</span>
+                        </a>
+                    </li>
+                </ul>
+            }
+
+            @if (User.IsInRole("SuperAdmin"))
+            {
+                <div class="nav-section-label">Admin</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Admin" && controller == "User" ? "active" : "")"
+                           asp-area="Admin" asp-controller="User" asp-action="Index">
+                            <i class="bi bi-shield-lock"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Admin" && controller == "Store" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Store" asp-action="Index">
+                            <i class="bi bi-building"></i>
+                            <span>Stores</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(area == "Admin" && controller == "System" ? "active" : "")"
+                           asp-area="Admin" asp-controller="System" asp-action="Index">
+                            <i class="bi bi-gear"></i>
+                            <span>System</span>
+                        </a>
+                    </li>
+                </ul>
+            }
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user-compact">
+                <div class="user-avatar">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="user-meta">
+                    <span class="user-name">@User.Identity?.Name</span>
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
+                        <span class="badge bg-danger bg-opacity-75">Super Admin</span>
+                    }
+                    else if (User.IsInRole("TenantAdmin"))
+                    {
+                        <span class="badge bg-primary bg-opacity-75">Admin</span>
+                    }
+                    else if (User.IsInRole("Finance"))
+                    {
+                        <span class="badge bg-success bg-opacity-75">Finance</span>
+                    }
+                    else if (User.IsInRole("Support"))
+                    {
+                        <span class="badge bg-warning bg-opacity-75">Support</span>
+                    }
+                </div>
+            </div>
         </div>
-    </nav>
-    <main class="main-content">
-        @RenderBody()
-    </main>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="sidebar-toggle d-lg-none" id="sidebarToggle" type="button" aria-label="Toggle sidebar">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h1 class="page-title">@ViewData["Title"]</h1>
+            </div>
+            <div class="header-right">
+                <div class="header-user">
+                    <span class="header-user-name d-none d-sm-inline">@User.Identity?.Name</span>
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
+                        <span class="badge bg-danger">Super Admin</span>
+                    }
+                    else if (User.IsInRole("TenantAdmin"))
+                    {
+                        <span class="badge bg-primary">Admin</span>
+                    }
+                    else if (User.IsInRole("Finance"))
+                    {
+                        <span class="badge bg-success">Finance</span>
+                    }
+                    else if (User.IsInRole("Support"))
+                    {
+                        <span class="badge bg-warning text-dark">Support</span>
+                    }
+                    <form asp-area="Account" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-secondary btn-sm header-signout">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span class="d-none d-md-inline ms-1">Sign out</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function () {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebarOverlay');
+            var toggle = document.getElementById('sidebarToggle');
+            var close = document.getElementById('sidebarClose');
+
+            function openSidebar() {
+                sidebar.classList.add('open');
+                overlay.classList.add('visible');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('visible');
+                document.body.style.overflow = '';
+            }
+
+            if (toggle) toggle.addEventListener('click', openSidebar);
+            if (close) close.addEventListener('click', closeSidebar);
+            if (overlay) overlay.addEventListener('click', closeSidebar);
+        })();
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

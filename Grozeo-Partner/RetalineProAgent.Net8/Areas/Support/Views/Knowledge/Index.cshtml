@@ -1,7 +1,104 @@
 @{
-    ViewData["Title"] = "Knowledge";
-    Layout = "_Layout";
+    ViewData["Title"] = "Knowledge Base";
 }
-<h2>Knowledge</h2>
-<p>Area: Support | Controller: Knowledge</p>
-{/* TODO: Implement Knowledge view — migrated from Knowledge.aspx */}
+
+<div class="container-fluid py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1 fw-bold">Knowledge Base</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new{area="Tenant"})">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Knowledge Base</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+            <button class="btn btn-primary btn-sm" disabled><i class="bi bi-plus-lg me-1"></i>New Article</button>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search articles, guides, and FAQs..." disabled />
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-rocket-takeoff text-primary fs-3"></i>
+                    </div>
+                    <h6 class="card-title">Getting Started</h6>
+                    <p class="text-muted small">Setup guides, onboarding steps, and first-time configuration.</p>
+                    <span class="badge bg-secondary">0 articles</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-receipt text-success fs-3"></i>
+                    </div>
+                    <h6 class="card-title">Orders</h6>
+                    <p class="text-muted small">Order management, fulfilment, returns, and cancellations.</p>
+                    <span class="badge bg-secondary">0 articles</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-info bg-opacity-10 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-box-seam text-info fs-3"></i>
+                    </div>
+                    <h6 class="card-title">Products</h6>
+                    <p class="text-muted small">Product listing, pricing, categories, and bulk uploads.</p>
+                    <span class="badge bg-secondary">0 articles</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-warning bg-opacity-10 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-credit-card text-warning fs-3"></i>
+                    </div>
+                    <h6 class="card-title">Payments</h6>
+                    <p class="text-muted small">Payment methods, settlements, and refund procedures.</p>
+                    <span class="badge bg-secondary">0 articles</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-danger bg-opacity-10 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-truck text-danger fs-3"></i>
+                    </div>
+                    <h6 class="card-title">Delivery</h6>
+                    <p class="text-muted small">Delivery zones, slot management, and driver assignment.</p>
+                    <span class="badge bg-secondary">0 articles</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-secondary bg-opacity-10 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-question-circle text-secondary fs-3"></i>
+                    </div>
+                    <h6 class="card-title">FAQs</h6>
+                    <p class="text-muted small">Frequently asked questions and common troubleshooting tips.</p>
+                    <span class="badge bg-secondary">0 articles</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

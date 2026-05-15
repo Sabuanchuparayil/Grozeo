@@ -1,7 +1,101 @@
+@model IEnumerable<RetalineProAgent.Models.AppUser>
 @{
-    ViewData["Title"] = "User";
+    ViewData["Title"] = "User Management";
     Layout = "_Layout";
 }
-<h2>User</h2>
-<p>Area: Admin | Controller: User</p>
-{/* TODO: Implement User view — migrated from User.aspx */}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Users</h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            Add User
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var user in Model)
+                            {
+                                var roleBadge = user.usr_role switch
+                                {
+                                    "SuperAdmin" => "danger",
+                                    "TenantAdmin" => "primary",
+                                    "Finance" => "warning",
+                                    "Support" => "info",
+                                    _ => "secondary"
+                                };
+
+                                <tr>
+                                    <td><strong>@user.usr_id</strong></td>
+                                    <td>@user.usr_name</td>
+                                    <td>@user.usr_email</td>
+                                    <td><span class="badge bg-@roleBadge">@user.usr_role</span></td>
+                                    <td>
+                                        @if (user.usr_status == 1)
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Inactive</span>
+                                        }
+                                    </td>
+                                    <td class="text-muted small">—</td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@user.usr_id" class="btn btn-sm btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                            Edit
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">No users found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

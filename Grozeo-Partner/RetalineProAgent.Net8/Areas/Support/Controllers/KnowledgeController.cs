@@ -19,10 +19,7 @@ public class KnowledgeController : Controller
 
     public IActionResult Index(int? id)
     {
-        _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Support", "Knowledge", "Index");
-        ViewBag.Title = "Coming Soon";
-        ViewBag.Message = "This feature is under development.";
-        return View("~/Views/Shared/ComingSoon.cshtml");
+        return View();
     }
 
     public IActionResult Articles(int? id)

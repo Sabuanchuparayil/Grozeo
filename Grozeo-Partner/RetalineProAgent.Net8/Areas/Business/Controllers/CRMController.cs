@@ -17,6 +17,11 @@ public class CRMController : Controller
         _logger = logger;
     }
 
+    public IActionResult Index(int? id)
+    {
+        return View();
+    }
+
     public IActionResult Prospects(int? id)
     {
         _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Business", "CRM", "Prospects");

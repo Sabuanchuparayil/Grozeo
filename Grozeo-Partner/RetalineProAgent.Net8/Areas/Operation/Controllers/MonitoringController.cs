@@ -17,6 +17,11 @@ public class MonitoringController : Controller
         _logger = logger;
     }
 
+    public IActionResult Index(int? id)
+    {
+        return View();
+    }
+
     public IActionResult PackingDelays(int? id)
     {
         _logger.LogWarning("{Area}/{Controller}/{Action} not yet implemented", "Operation", "Monitoring", "PackingDelays");
