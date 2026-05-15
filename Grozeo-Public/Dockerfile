@@ -16,11 +16,10 @@ RUN apk add --no-cache curl
 COPY --from=build /app/publish .
 
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV PORT=5000
-ENV ASPNETCORE_URLS=http://+:${PORT}
-EXPOSE ${PORT}
 
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD curl -f http://localhost:${PORT}/Health/ping || exit 1
+EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "Retaline.Web.dll"]
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8080}/Health/ping || exit 1
+
+ENTRYPOINT ["sh", "-c", "exec dotnet Retaline.Web.dll --urls http://+:${PORT:-8080}"]
