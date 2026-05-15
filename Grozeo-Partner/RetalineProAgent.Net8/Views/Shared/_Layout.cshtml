@@ -407,7 +407,10 @@
             var container = document.getElementById('toastContainer');
             if (container) {
                 container.querySelectorAll('.toast').forEach(function (el) {
-                    var toast = new bootstrap.Toast(el);
+                    var toast = new bootstrap.Toast(el, {
+                        autohide: el.dataset.bsAutohide !== 'false',
+                        delay: parseInt(el.dataset.bsDelay, 10) || 5000
+                    });
                     toast.show();
                 });
             }
