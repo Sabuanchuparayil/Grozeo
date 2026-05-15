@@ -47,11 +47,11 @@ public class AccountController : Controller
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new(ClaimTypes.Name,           user.UserName),
-            new(ClaimTypes.Email,          user.Email),
-            new(ClaimTypes.Role,           user.Role),
-            new("BranchId",                user.BranchId.ToString()),
+            new(ClaimTypes.NameIdentifier, user.usr_id.ToString()),
+            new(ClaimTypes.Name,           user.usr_name),
+            new(ClaimTypes.Email,          user.usr_email),
+            new(ClaimTypes.Role,           user.usr_role),
+            new("BranchId",                user.usr_branch_id.ToString()),
         };
 
         var identity   = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
