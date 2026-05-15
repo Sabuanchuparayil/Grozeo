@@ -91,6 +91,13 @@ body {
     font-size: 1.1rem;
 }
 
+.sidebar-brand .brand-logo-img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 .sidebar-brand .brand-text {
     font-size: 1.3rem;
     font-weight: 700;
@@ -119,6 +126,7 @@ body {
     padding: 0.5rem 0 1rem;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    box-shadow: inset 0 -12px 12px -12px rgba(0, 0, 0, 0.35);
 }
 
 .sidebar-nav::-webkit-scrollbar {
@@ -532,6 +540,70 @@ body {
 
 .main-content > * {
     animation: fadeIn 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .main-content > * {
+        animation: none !important;
+    }
+}
+
+/* Unified stat tiles — listing pages & dashboards */
+.stat-tile .stat-tile-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin-bottom: 0.35rem;
+}
+
+.stat-tile .stat-tile-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-primary);
+}
+
+.stat-tile-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.35rem;
+}
+
+.stat-tile-icon.stat-primary {
+    color: #0d6efd;
+    background: rgba(13, 110, 253, 0.1);
+}
+
+.stat-tile-icon.stat-success {
+    color: #198754;
+    background: rgba(25, 135, 84, 0.1);
+}
+
+.stat-tile-icon.stat-danger {
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+.stat-tile-icon.stat-warning {
+    color: #fd7e14;
+    background: rgba(253, 126, 20, 0.1);
+}
+
+.stat-tile-icon.stat-info {
+    color: #0dcaf0;
+    background: rgba(13, 202, 240, 0.12);
+}
+
+.stat-tile-icon.stat-secondary {
+    color: #6c757d;
+    background: rgba(108, 117, 125, 0.12);
 }
 
 /* Print: hide chrome */

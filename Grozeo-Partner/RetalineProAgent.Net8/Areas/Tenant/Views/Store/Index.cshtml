@@ -9,9 +9,12 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 small">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new{area="Tenant"})">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Store Settings</li>
+                    <li class="breadcrumb-item active" aria-current="page">Store Settings</li>
                 </ol>
             </nav>
+        </div>
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+            <a asp-action="Settings" class="btn btn-outline-primary btn-sm"><i class="bi bi-gear me-1" aria-hidden="true"></i>Open settings hub</a>
         </div>
     </div>
 
@@ -21,10 +24,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h5 class="card-title mb-1"><i class="bi bi-shop me-2 text-primary"></i>Store Information</h5>
+                            <h5 class="card-title mb-1"><i class="bi bi-shop me-2 text-primary" aria-hidden="true"></i>Store Information</h5>
                             <p class="text-muted small mb-0">Basic store details, logo, and contact information</p>
                         </div>
-                        <button class="btn btn-outline-primary btn-sm" disabled>Edit</button>
+                        <a asp-action="Settings" class="btn btn-outline-primary btn-sm">Edit</a>
                     </div>
                     <div class="border rounded p-3 bg-light">
                         <div class="row g-2 small">
@@ -47,10 +50,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h5 class="card-title mb-1"><i class="bi bi-clock me-2 text-primary"></i>Business Hours</h5>
+                            <h5 class="card-title mb-1"><i class="bi bi-clock me-2 text-primary" aria-hidden="true"></i>Business Hours</h5>
                             <p class="text-muted small mb-0">Operating hours for each day of the week</p>
                         </div>
-                        <button class="btn btn-outline-primary btn-sm" disabled>Edit</button>
+                        <a asp-action="Branches" class="btn btn-outline-primary btn-sm">Edit</a>
                     </div>
                     <div class="border rounded p-3 bg-light">
                         <div class="row g-2 small">
@@ -71,10 +74,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h5 class="card-title mb-1"><i class="bi bi-truck me-2 text-primary"></i>Delivery Settings</h5>
+                            <h5 class="card-title mb-1"><i class="bi bi-truck me-2 text-primary" aria-hidden="true"></i>Delivery Settings</h5>
                             <p class="text-muted small mb-0">Delivery zones, charges, and minimum order values</p>
                         </div>
-                        <button class="btn btn-outline-primary btn-sm" disabled>Edit</button>
+                        <a asp-area="Tenant" asp-controller="Delivery" asp-action="Rules" class="btn btn-outline-primary btn-sm">Edit</a>
                     </div>
                     <div class="border rounded p-3 bg-light">
                         <div class="row g-2 small">
@@ -97,10 +100,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h5 class="card-title mb-1"><i class="bi bi-credit-card me-2 text-primary"></i>Payment Methods</h5>
+                            <h5 class="card-title mb-1"><i class="bi bi-credit-card me-2 text-primary" aria-hidden="true"></i>Payment Methods</h5>
                             <p class="text-muted small mb-0">Accepted payment methods and gateway configuration</p>
                         </div>
-                        <button class="btn btn-outline-primary btn-sm" disabled>Edit</button>
+                        <a asp-action="Subscription" class="btn btn-outline-primary btn-sm">Edit</a>
                     </div>
                     <div class="border rounded p-3 bg-light">
                         <div class="row g-2 small">
@@ -113,6 +116,17 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body text-center py-5">
+            <div class="empty-state">
+                <i class="bi bi-shop-window" aria-hidden="true"></i>
+                <p class="text-muted mt-3 mb-3">Finish configuring your store so customers have a smooth checkout experience.</p>
+                <a asp-action="Settings" class="btn btn-primary btn-sm me-2">Configure store</a>
+                <a asp-area="Tenant" asp-controller="Product" asp-action="Create" class="btn btn-outline-secondary btn-sm">Add products</a>
             </div>
         </div>
     </div>

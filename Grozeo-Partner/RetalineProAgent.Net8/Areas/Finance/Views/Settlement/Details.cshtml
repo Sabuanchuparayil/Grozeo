@@ -1,0 +1,63 @@
+@model RetalineProAgent.Models.SettlementViewModel
+@{
+    ViewData["Title"] = $"Settlement {Model.SettlementNumber}";
+    var statusClass = Model.Status == "Completed" ? "bg-success" : Model.Status == "Pending" ? "bg-warning text-dark" : "bg-secondary";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-outline-secondary me-3" aria-label="Back">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                </a>
+                <div>
+                    <h4 class="mb-0 fw-bold">@Model.SettlementNumber</h4>
+                    <span class="badge @statusClass">@Model.Status</span>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <small class="text-muted d-block">Settlement Amount</small>
+                            <span class="fs-3 fw-bold text-success">₹@Model.Amount.ToString("N2")</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <small class="text-muted d-block">Settlement Date</small>
+                            <span class="fw-medium">@Model.Date.ToString("dd MMMM yyyy")</span>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <small class="text-muted d-block">Bank Account</small>
+                            <span>@Model.BankAccount</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <small class="text-muted d-block">UTR / Reference</small>
+                            <code>@(string.IsNullOrEmpty(Model.UTR) ? "Pending" : Model.UTR)</code>
+                        </div>
+                    </div>
+                    @if (Model.Status == "Completed")
+                    {
+                        <hr />
+                        <div class="alert alert-success mb-0">
+                            <i class="bi bi-check-circle me-2"></i>
+                            This settlement was successfully processed on @Model.Date.ToString("dd MMM yyyy").
+                        </div>
+                    }
+                    else if (Model.Status == "Pending")
+                    {
+                        <hr />
+                        <div class="alert alert-warning mb-0">
+                            <i class="bi bi-hourglass-split me-2"></i>
+                            This settlement is being processed. Expected completion: @Model.Date.AddDays(2).ToString("dd MMM yyyy").
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

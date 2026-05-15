@@ -1,0 +1,64 @@
+@model List<RetalineProAgent.Models.SettlementViewModel>
+@{
+    ViewData["Title"] = "Settlement Passbook";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1 fw-bold">Settlement Passbook</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a asp-area="Tenant" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Index">Settlements</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Passbook</li>
+                </ol>
+            </nav>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Account: <strong>HDFC Bank ****4521</strong></h6>
+                <span class="badge bg-success">Active</span>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Description</th>
+                            <th scope="col" class="text-end">Credit</th>
+                            <th scope="col" class="text-end">Debit</th>
+                            <th scope="col" class="text-end">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            decimal balance = 176980m;
+                        }
+                        @foreach (var s in Model.Where(x => x.Status == "Completed").OrderByDescending(x => x.Date))
+                        {
+                            <tr>
+                                <td>@s.Date.ToString("dd MMM yyyy")</td>
+                                <td>Settlement @s.SettlementNumber<br /><small class="text-muted">UTR: @s.UTR</small></td>
+                                <td class="text-end text-success">₹@s.Amount.ToString("N2")</td>
+                                <td class="text-end">—</td>
+                                <td class="text-end fw-medium">₹@balance.ToString("N2")</td>
+                            </tr>
+                            balance -= s.Amount;
+                        }
+                        <tr class="table-secondary">
+                            <td colspan="4" class="text-end"><strong>Opening Balance</strong></td>
+                            <td class="text-end fw-bold">₹@balance.ToString("N2")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

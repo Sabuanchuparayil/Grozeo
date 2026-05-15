@@ -9,46 +9,66 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 small">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new{area="Tenant"})">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Stores</li>
+                    <li class="breadcrumb-item active" aria-current="page">Stores</li>
                 </ol>
             </nav>
         </div>
         <div class="d-flex gap-2 mt-2 mt-md-0">
-            <button class="btn btn-outline-secondary btn-sm" disabled><i class="bi bi-download me-1"></i>Export</button>
-            <button class="btn btn-primary btn-sm" disabled><i class="bi bi-plus-lg me-1"></i>Add Store</button>
+            <a asp-action="Config" class="btn btn-outline-secondary btn-sm"><i class="bi bi-download me-1" aria-hidden="true"></i>Export</a>
+            <a asp-action="Domains" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add Store</a>
         </div>
     </div>
 
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Total Stores</div>
-                    <div class="fs-4 fw-bold">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Total Stores</div>
+                            <div class="stat-tile-value">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-primary" aria-hidden="true"><i class="bi bi-building"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Active</div>
-                    <div class="fs-4 fw-bold text-success">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Active</div>
+                            <div class="stat-tile-value text-success">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-success" aria-hidden="true"><i class="bi bi-check-circle"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Pending Approval</div>
-                    <div class="fs-4 fw-bold text-warning">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Pending Approval</div>
+                            <div class="stat-tile-value text-warning">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-warning" aria-hidden="true"><i class="bi bi-hourglass-split"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Suspended</div>
-                    <div class="fs-4 fw-bold text-danger">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Suspended</div>
+                            <div class="stat-tile-value text-danger">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-danger" aria-hidden="true"><i class="bi bi-pause-circle"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,20 +80,22 @@
                 <table class="table table-hover table-striped align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Store Name</th>
-                            <th>Owner</th>
-                            <th>Location</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th class="text-center">Actions</th>
+                            <th scope="col">Store Name</th>
+                            <th scope="col">Owner</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Created</th>
+                            <th scope="col" class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td colspan="6">
-                                <div class="text-center py-5">
-                                    <i class="bi bi-building display-4 text-muted"></i>
-                                    <p class="text-muted mt-3 mb-0">No stores registered. Stores will appear here as merchants onboard.</p>
+                                <div class="empty-state text-center py-5 px-3">
+                                    <i class="bi bi-building" aria-hidden="true"></i>
+                                    <p class="text-muted mt-3 mb-3">No stores registered. Stores will appear here as merchants onboard.</p>
+                                    <a asp-action="Domains" class="btn btn-primary btn-sm me-2"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Register a store</a>
+                                    <a asp-action="Config" class="btn btn-outline-secondary btn-sm">Store configuration</a>
                                 </div>
                             </td>
                         </tr>

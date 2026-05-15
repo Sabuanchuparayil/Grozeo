@@ -1,0 +1,112 @@
+@{
+    ViewData["Title"] = "Analytics";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1 fw-bold">Analytics</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Analytics</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+            <select class="form-select form-select-sm" style="width:auto;">
+                <option>Last 7 days</option>
+                <option selected>Last 30 days</option>
+                <option>Last 90 days</option>
+                <option>This year</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="stat-tile-label">Total Revenue</div>
+                    <div class="stat-tile-value text-success">₹1,25,450</div>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> 15.3% vs previous period</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="stat-tile-label">Orders</div>
+                    <div class="stat-tile-value">156</div>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> 8.2% vs previous period</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="stat-tile-label">Avg Order Value</div>
+                    <div class="stat-tile-value">₹804</div>
+                    <small class="text-danger"><i class="bi bi-arrow-down"></i> 2.1% vs previous period</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="stat-tile-label">Conversion Rate</div>
+                    <div class="stat-tile-value">3.8%</div>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> 0.5% vs previous period</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0">Revenue Trend</h6>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center" style="min-height:300px;">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-bar-chart-line display-1 opacity-25"></i>
+                        <p class="mt-3">Chart visualization would appear here</p>
+                        <small>Integrate with Chart.js or similar library</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0">Top Selling Products</h6>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Premium Basmati Rice 5kg</span>
+                            <span class="badge bg-primary">42 sold</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Sunflower Oil 1L</span>
+                            <span class="badge bg-primary">38 sold</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Toor Dal 1kg</span>
+                            <span class="badge bg-primary">35 sold</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Premium Tea 500g</span>
+                            <span class="badge bg-primary">28 sold</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Sugar 5kg</span>
+                            <span class="badge bg-primary">25 sold</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

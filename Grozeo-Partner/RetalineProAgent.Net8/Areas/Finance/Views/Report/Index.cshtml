@@ -9,7 +9,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 small">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new{area="Tenant"})">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Reports</li>
+                    <li class="breadcrumb-item active" aria-current="page">Reports</li>
                 </ol>
             </nav>
         </div>
@@ -19,17 +19,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-graph-up text-primary fs-4"></i>
-                        </div>
+                    <div class="d-flex align-items-start mb-3 gap-3">
+                        <div class="stat-tile-icon stat-primary flex-shrink-0" aria-hidden="true"><i class="bi bi-graph-up"></i></div>
                         <div>
                             <h6 class="card-title mb-0">Sales Report</h6>
                             <small class="text-muted">Revenue, orders, and sales trends</small>
                         </div>
                     </div>
                     <p class="text-muted small">Analyse sales performance across products, categories, and time periods with detailed breakdowns.</p>
-                    <button class="btn btn-outline-primary btn-sm w-100" disabled><i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report</button>
+                    <a asp-action="Sales" class="btn btn-outline-primary btn-sm w-100"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i>Generate Report</a>
                 </div>
             </div>
         </div>
@@ -37,17 +35,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-percent text-success fs-4"></i>
-                        </div>
+                    <div class="d-flex align-items-start mb-3 gap-3">
+                        <div class="stat-tile-icon stat-success flex-shrink-0" aria-hidden="true"><i class="bi bi-percent"></i></div>
                         <div>
                             <h6 class="card-title mb-0">Tax Report (GST)</h6>
                             <small class="text-muted">GST input, output, and net liability</small>
                         </div>
                     </div>
                     <p class="text-muted small">Comprehensive GST reports for filing returns with IGST, CGST, and SGST breakdowns.</p>
-                    <button class="btn btn-outline-primary btn-sm w-100" disabled><i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report</button>
+                    <a asp-action="GST" class="btn btn-outline-primary btn-sm w-100"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i>Generate Report</a>
                 </div>
             </div>
         </div>
@@ -55,17 +51,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-arrow-left-right text-info fs-4"></i>
-                        </div>
+                    <div class="d-flex align-items-start mb-3 gap-3">
+                        <div class="stat-tile-icon stat-info flex-shrink-0" aria-hidden="true"><i class="bi bi-arrow-left-right"></i></div>
                         <div>
                             <h6 class="card-title mb-0">Profit &amp; Loss</h6>
                             <small class="text-muted">Income, expenses, and net profit</small>
                         </div>
                     </div>
                     <p class="text-muted small">Track profitability with income and expense summaries over customisable date ranges.</p>
-                    <button class="btn btn-outline-primary btn-sm w-100" disabled><i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report</button>
+                    <a asp-action="ProfitLoss" class="btn btn-outline-primary btn-sm w-100"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i>Generate Report</a>
                 </div>
             </div>
         </div>
@@ -73,17 +67,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-cash-stack text-warning fs-4"></i>
-                        </div>
+                    <div class="d-flex align-items-start mb-3 gap-3">
+                        <div class="stat-tile-icon stat-warning flex-shrink-0" aria-hidden="true"><i class="bi bi-cash-stack"></i></div>
                         <div>
                             <h6 class="card-title mb-0">Cash Flow</h6>
                             <small class="text-muted">Inflows, outflows, and balance</small>
                         </div>
                     </div>
                     <p class="text-muted small">Monitor cash movements with operating, investing, and financing activity breakdowns.</p>
-                    <button class="btn btn-outline-primary btn-sm w-100" disabled><i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report</button>
+                    <a asp-action="Daybook" class="btn btn-outline-primary btn-sm w-100"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i>Generate Report</a>
                 </div>
             </div>
         </div>
@@ -91,17 +83,15 @@
         <div class="col-md-6 col-lg-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-danger bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-clipboard-data text-danger fs-4"></i>
-                        </div>
+                    <div class="d-flex align-items-start mb-3 gap-3">
+                        <div class="stat-tile-icon stat-danger flex-shrink-0" aria-hidden="true"><i class="bi bi-clipboard-data"></i></div>
                         <div>
                             <h6 class="card-title mb-0">Balance Sheet</h6>
                             <small class="text-muted">Assets, liabilities, and equity</small>
                         </div>
                     </div>
                     <p class="text-muted small">View the financial position with detailed asset, liability, and equity breakdowns.</p>
-                    <button class="btn btn-outline-primary btn-sm w-100" disabled><i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report</button>
+                    <a asp-action="BalanceSheet" class="btn btn-outline-primary btn-sm w-100"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i>Generate Report</a>
                 </div>
             </div>
         </div>
@@ -109,19 +99,26 @@
         <div class="col-md-6 col-lg-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-secondary bg-opacity-10 p-3 me-3">
-                            <i class="bi bi-journal-check text-secondary fs-4"></i>
-                        </div>
+                    <div class="d-flex align-items-start mb-3 gap-3">
+                        <div class="stat-tile-icon stat-secondary flex-shrink-0" aria-hidden="true"><i class="bi bi-journal-check"></i></div>
                         <div>
                             <h6 class="card-title mb-0">Trial Balance</h6>
                             <small class="text-muted">Debit and credit verification</small>
                         </div>
                     </div>
                     <p class="text-muted small">Verify ledger accuracy with a complete trial balance showing all accounts.</p>
-                    <button class="btn btn-outline-primary btn-sm w-100" disabled><i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report</button>
+                    <a asp-action="TrialBalance" class="btn btn-outline-primary btn-sm w-100"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i>Generate Report</a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body empty-state text-center py-5">
+            <i class="bi bi-folder2-open" aria-hidden="true"></i>
+            <p class="text-muted mt-3 mb-3">Need a quick export? Run the day book or trial balance to validate postings.</p>
+            <a asp-action="Daybook" class="btn btn-outline-secondary btn-sm me-2">Open day book</a>
+            <a asp-action="TrialBalance" class="btn btn-outline-secondary btn-sm">Trial balance</a>
         </div>
     </div>
 </div>

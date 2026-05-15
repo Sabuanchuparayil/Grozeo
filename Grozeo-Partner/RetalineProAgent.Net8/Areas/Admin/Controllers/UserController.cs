@@ -20,12 +20,27 @@ public class UserController : Controller
         _logger = logger;
     }
 
-    public async Task<IActionResult> Index(int? id)
+    public async Task<IActionResult> Index(int? id, string? q)
     {
         try
         {
-            var users = await _db.QueryAsync<AppUser>(
-                "SELECT * FROM finascop_usr_master ORDER BY usr_id");
+            IEnumerable<AppUser> users;
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var pattern = $"%{q.Trim()}%";
+                users = await _db.QueryAsync<AppUser>(
+                    @"SELECT * FROM finascop_usr_master 
+                      WHERE usr_name LIKE @Pattern OR usr_email LIKE @Pattern 
+                      ORDER BY usr_id",
+                    new { Pattern = pattern });
+                ViewBag.SearchQuery = q.Trim();
+            }
+            else
+            {
+                users = await _db.QueryAsync<AppUser>(
+                    "SELECT * FROM finascop_usr_master ORDER BY usr_id");
+            }
+
             return View(users);
         }
         catch (Exception ex)

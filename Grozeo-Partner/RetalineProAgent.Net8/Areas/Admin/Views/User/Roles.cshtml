@@ -5,10 +5,8 @@
 
 <div class="container-fluid py-4">
     <div class="d-flex align-items-center mb-4">
-        <a asp-action="Index" class="btn btn-outline-secondary me-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-            </svg>
+        <a asp-action="Index" class="btn btn-outline-secondary me-3" aria-label="Back to users">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i>
         </a>
         <h2 class="mb-0">Role Management</h2>
     </div>
@@ -23,26 +21,11 @@
                     <p class="text-muted mb-3">Full system access with unrestricted permissions across all areas.</p>
                     <h6 class="fw-semibold mb-2">Permissions:</h6>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            User management
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            System configuration
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            All tenant operations
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Financial reports &amp; settlements
-                        </li>
-                        <li>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Support ticket management
-                        </li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>User management</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>System configuration</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>All tenant operations</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Financial reports &amp; settlements</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Support ticket management</li>
                     </ul>
                 </div>
             </div>
@@ -57,26 +40,11 @@
                     <p class="text-muted mb-3">Store-level administration for managing daily operations and inventory.</p>
                     <h6 class="fw-semibold mb-2">Permissions:</h6>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Dashboard access
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Order management
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Product &amp; inventory management
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Store settings
-                        </li>
-                        <li>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#dc3545" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>
-                            <span class="text-muted">No user management</span>
-                        </li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Dashboard access</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Order management</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Product &amp; inventory management</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Store settings</li>
+                        <li><i class="bi bi-x-circle-fill text-danger me-1" aria-hidden="true"></i><span class="text-muted">No user management</span></li>
                     </ul>
                 </div>
             </div>
@@ -91,26 +59,11 @@
                     <p class="text-muted mb-3">Access to financial data, settlements, invoices, and payment reports.</p>
                     <h6 class="fw-semibold mb-2">Permissions:</h6>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Settlement reports
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Invoice management
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Payment history
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#dc3545" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>
-                            <span class="text-muted">No order management</span>
-                        </li>
-                        <li>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#dc3545" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>
-                            <span class="text-muted">No product management</span>
-                        </li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Settlement reports</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Invoice management</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Payment history</li>
+                        <li class="mb-1"><i class="bi bi-x-circle-fill text-danger me-1" aria-hidden="true"></i><span class="text-muted">No order management</span></li>
+                        <li><i class="bi bi-x-circle-fill text-danger me-1" aria-hidden="true"></i><span class="text-muted">No product management</span></li>
                     </ul>
                 </div>
             </div>
@@ -125,26 +78,11 @@
                     <p class="text-muted mb-3">Customer support access for handling tickets, queries, and escalations.</p>
                     <h6 class="fw-semibold mb-2">Permissions:</h6>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Support ticket management
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            View order details (read-only)
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#198754" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            Customer communication
-                        </li>
-                        <li class="mb-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#dc3545" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>
-                            <span class="text-muted">No financial access</span>
-                        </li>
-                        <li>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#dc3545" class="me-1" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>
-                            <span class="text-muted">No system configuration</span>
-                        </li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Support ticket management</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>View order details (read-only)</li>
+                        <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i>Customer communication</li>
+                        <li class="mb-1"><i class="bi bi-x-circle-fill text-danger me-1" aria-hidden="true"></i><span class="text-muted">No financial access</span></li>
+                        <li><i class="bi bi-x-circle-fill text-danger me-1" aria-hidden="true"></i><span class="text-muted">No system configuration</span></li>
                     </ul>
                 </div>
             </div>

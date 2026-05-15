@@ -9,45 +9,65 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 small">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new{area="Tenant"})">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Drivers</li>
+                    <li class="breadcrumb-item active" aria-current="page">Drivers</li>
                 </ol>
             </nav>
         </div>
         <div class="d-flex gap-2 mt-2 mt-md-0">
-            <button class="btn btn-primary btn-sm" disabled><i class="bi bi-plus-lg me-1"></i>Add Driver</button>
+            <a asp-action="Create" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add Driver</a>
         </div>
     </div>
 
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Total Drivers</div>
-                    <div class="fs-4 fw-bold">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Total Drivers</div>
+                            <div class="stat-tile-value">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-primary" aria-hidden="true"><i class="bi bi-person-vcard"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Available</div>
-                    <div class="fs-4 fw-bold text-success">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Available</div>
+                            <div class="stat-tile-value text-success">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-success" aria-hidden="true"><i class="bi bi-person-check"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">On Delivery</div>
-                    <div class="fs-4 fw-bold text-info">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">On Delivery</div>
+                            <div class="stat-tile-value text-info">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-info" aria-hidden="true"><i class="bi bi-truck"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Off Duty</div>
-                    <div class="fs-4 fw-bold text-secondary">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Off Duty</div>
+                            <div class="stat-tile-value text-secondary">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-secondary" aria-hidden="true"><i class="bi bi-moon"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,20 +79,21 @@
                 <table class="table table-hover table-striped align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>Vehicle</th>
-                            <th>Status</th>
-                            <th class="text-center">Deliveries Today</th>
-                            <th class="text-center">Actions</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Vehicle</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-center">Deliveries Today</th>
+                            <th scope="col" class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td colspan="6">
-                                <div class="text-center py-5">
-                                    <i class="bi bi-person-vcard display-4 text-muted"></i>
-                                    <p class="text-muted mt-3 mb-0">No drivers registered. Add drivers to assign them to deliveries.</p>
+                                <div class="empty-state text-center py-5 px-3">
+                                    <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                                    <p class="text-muted mt-3 mb-3">No drivers registered. Add drivers to assign them to deliveries.</p>
+                                    <a asp-action="Create" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add driver</a>
                                 </div>
                             </td>
                         </tr>

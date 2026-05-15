@@ -1,5 +1,8 @@
+@model List<RetalineProAgent.Models.TicketViewModel>
 @{
     ViewData["Title"] = "Support Tickets";
+    var currentStatus = ViewBag.CurrentStatus as string ?? "All";
+    var allTickets = RetalineProAgent.Services.MockDataService.GetTickets();
 }
 
 <div class="container-fluid py-4">
@@ -8,48 +11,81 @@
             <h4 class="mb-1 fw-bold">Support Tickets</h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 small">
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new{area="Tenant"})">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Support Tickets</li>
+                    <li class="breadcrumb-item"><a asp-area="Tenant" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Support Tickets</li>
                 </ol>
             </nav>
         </div>
         <div class="d-flex gap-2 mt-2 mt-md-0">
-            <button class="btn btn-primary btn-sm" disabled><i class="bi bi-plus-lg me-1"></i>New Ticket</button>
+            <a asp-action="Create" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>New Ticket</a>
         </div>
     </div>
 
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm border-start border-danger border-4">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Open</div>
-                    <div class="fs-4 fw-bold text-danger">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Open</div>
+                            <div class="stat-tile-value text-danger">@allTickets.Count(t => t.Status == "Open")</div>
+                        </div>
+                        <div class="stat-tile-icon stat-danger" aria-hidden="true"><i class="bi bi-envelope-open"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm border-start border-warning border-4">
-                <div class="card-body text-center">
-                    <div class="text-muted small">In Progress</div>
-                    <div class="fs-4 fw-bold text-warning">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">In Progress</div>
+                            <div class="stat-tile-value text-warning">@allTickets.Count(t => t.Status == "In Progress" || t.Status == "Pending")</div>
+                        </div>
+                        <div class="stat-tile-icon stat-warning" aria-hidden="true"><i class="bi bi-hourglass-split"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm border-start border-success border-4">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Resolved</div>
-                    <div class="fs-4 fw-bold text-success">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Resolved</div>
+                            <div class="stat-tile-value text-success">@allTickets.Count(t => t.Status == "Resolved")</div>
+                        </div>
+                        <div class="stat-tile-icon stat-success" aria-hidden="true"><i class="bi bi-check-circle"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm border-start border-secondary border-4">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Total</div>
-                    <div class="fs-4 fw-bold">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Escalated</div>
+                            <div class="stat-tile-value text-info">@allTickets.Count(t => t.Status == "Escalated")</div>
+                        </div>
+                        <div class="stat-tile-icon stat-info" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></div>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body py-3">
+            <span class="text-muted small me-2">Filter by status</span>
+            @foreach (var status in new[] { "All", "Open", "In Progress", "Pending", "Escalated", "Resolved" })
+            {
+                <a asp-action="Index" asp-route-status="@status" 
+                   class="badge rounded-pill @(currentStatus == status ? "bg-primary" : "bg-light text-muted border") text-decoration-none">
+                    @status
+                </a>
+            }
         </div>
     </div>
 
@@ -59,24 +95,58 @@
                 <table class="table table-hover table-striped align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Ticket #</th>
-                            <th>Subject</th>
-                            <th>Priority</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th>Assigned To</th>
-                            <th class="text-center">Actions</th>
+                            <th scope="col">Ticket #</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Created</th>
+                            <th scope="col" class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colspan="7">
-                                <div class="text-center py-5">
-                                    <i class="bi bi-headset display-4 text-muted"></i>
-                                    <p class="text-muted mt-3 mb-0">No support tickets found. Create a ticket to get help from the support team.</p>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach (var ticket in Model)
+                        {
+                            var priorityClass = ticket.Priority switch
+                            {
+                                "High" => "bg-danger",
+                                "Medium" => "bg-warning text-dark",
+                                "Low" => "bg-info",
+                                _ => "bg-secondary"
+                            };
+                            var statusClass = ticket.Status switch
+                            {
+                                "Open" => "bg-danger",
+                                "In Progress" => "bg-primary",
+                                "Pending" => "bg-warning text-dark",
+                                "Escalated" => "bg-info",
+                                "Resolved" => "bg-success",
+                                _ => "bg-secondary"
+                            };
+                            <tr>
+                                <td><a asp-action="Details" asp-route-id="@ticket.TicketNumber" class="fw-medium text-decoration-none">@ticket.TicketNumber</a></td>
+                                <td>@ticket.Subject</td>
+                                <td>@ticket.CustomerName</td>
+                                <td><span class="badge @priorityClass">@ticket.Priority</span></td>
+                                <td><span class="badge @statusClass">@ticket.Status</span></td>
+                                <td>
+                                    @ticket.CreatedAt.ToString("dd MMM yyyy")
+                                    <br /><small class="text-muted">@ticket.CreatedAt.ToString("hh:mm tt")</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@ticket.TicketNumber" class="btn btn-outline-primary" title="View"><i class="bi bi-eye"></i></a>
+                                        @if (ticket.Status != "Resolved")
+                                        {
+                                            <form asp-action="Resolve" asp-route-id="@ticket.TicketNumber" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-outline-success" title="Resolve"><i class="bi bi-check-lg"></i></button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

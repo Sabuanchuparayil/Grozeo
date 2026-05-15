@@ -1,5 +1,9 @@
+@model List<RetalineProAgent.Models.SettlementViewModel>
 @{
     ViewData["Title"] = "Settlements";
+    var totalSettled = Model.Where(s => s.Status == "Completed").Sum(s => s.Amount);
+    var pendingSettlement = Model.Where(s => s.Status == "Pending").Sum(s => s.Amount);
+    var thisMonth = Model.Where(s => s.Date.Month == DateTime.Now.Month && s.Status == "Completed").Sum(s => s.Amount);
 }
 
 <div class="container-fluid py-4">
@@ -8,43 +12,55 @@
             <h4 class="mb-1 fw-bold">Settlements</h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 small">
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new{area="Tenant"})">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Settlements</li>
+                    <li class="breadcrumb-item"><a asp-area="Tenant" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Settlements</li>
                 </ol>
             </nav>
         </div>
-        <div class="d-flex gap-2 mt-2 mt-md-0">
-            <div class="input-group input-group-sm" style="max-width:280px;">
-                <input type="date" class="form-control" disabled />
-                <span class="input-group-text">to</span>
-                <input type="date" class="form-control" disabled />
-            </div>
-            <button class="btn btn-outline-secondary btn-sm" disabled><i class="bi bi-download me-1"></i>Export</button>
+        <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0 align-items-center">
+            <a asp-action="Passbook" class="btn btn-outline-secondary btn-sm"><i class="bi bi-journal-text me-1" aria-hidden="true"></i>Passbook</a>
+            <a asp-action="Download" class="btn btn-outline-secondary btn-sm"><i class="bi bi-download me-1" aria-hidden="true"></i>Export</a>
+            <a asp-action="Apply" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Request Settlement</a>
         </div>
     </div>
 
     <div class="row g-3 mb-4">
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm border-start border-success border-4">
+            <div class="card border-0 shadow-sm h-100 stat-tile">
                 <div class="card-body">
-                    <div class="text-muted small">Total Settled</div>
-                    <div class="fs-4 fw-bold text-success">&#8377;0.00</div>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Total Settled</div>
+                            <div class="stat-tile-value text-success">₹@totalSettled.ToString("N2")</div>
+                        </div>
+                        <div class="stat-tile-icon stat-success" aria-hidden="true"><i class="bi bi-check-circle"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm border-start border-warning border-4">
+            <div class="card border-0 shadow-sm h-100 stat-tile">
                 <div class="card-body">
-                    <div class="text-muted small">Pending Settlement</div>
-                    <div class="fs-4 fw-bold text-warning">&#8377;0.00</div>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Pending Settlement</div>
+                            <div class="stat-tile-value text-warning">₹@pendingSettlement.ToString("N2")</div>
+                        </div>
+                        <div class="stat-tile-icon stat-warning" aria-hidden="true"><i class="bi bi-hourglass-split"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm border-start border-primary border-4">
+            <div class="card border-0 shadow-sm h-100 stat-tile">
                 <div class="card-body">
-                    <div class="text-muted small">This Month</div>
-                    <div class="fs-4 fw-bold text-primary">&#8377;0.00</div>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">This Month</div>
+                            <div class="stat-tile-value text-primary">₹@thisMonth.ToString("N2")</div>
+                        </div>
+                        <div class="stat-tile-icon stat-primary" aria-hidden="true"><i class="bi bi-calendar-month"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,22 +72,31 @@
                 <table class="table table-hover table-striped align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Settlement #</th>
-                            <th>Date</th>
-                            <th class="text-end">Amount</th>
-                            <th>Status</th>
-                            <th class="text-center">Actions</th>
+                            <th scope="col">Settlement #</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Bank Account</th>
+                            <th scope="col" class="text-end">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">UTR</th>
+                            <th scope="col" class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colspan="5">
-                                <div class="text-center py-5">
-                                    <i class="bi bi-bank display-4 text-muted"></i>
-                                    <p class="text-muted mt-3 mb-0">No settlements found. Settlement records will appear here once transactions are processed.</p>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach (var s in Model.OrderByDescending(x => x.Date))
+                        {
+                            var statusClass = s.Status == "Completed" ? "bg-success" : s.Status == "Pending" ? "bg-warning text-dark" : "bg-secondary";
+                            <tr>
+                                <td><a asp-action="Details" asp-route-id="@s.SettlementNumber" class="fw-medium text-decoration-none">@s.SettlementNumber</a></td>
+                                <td>@s.Date.ToString("dd MMM yyyy")</td>
+                                <td>@s.BankAccount</td>
+                                <td class="text-end fw-medium">₹@s.Amount.ToString("N2")</td>
+                                <td><span class="badge @statusClass">@s.Status</span></td>
+                                <td><code>@(string.IsNullOrEmpty(s.UTR) ? "—" : s.UTR)</code></td>
+                                <td class="text-center">
+                                    <a asp-action="Details" asp-route-id="@s.SettlementNumber" class="btn btn-sm btn-outline-primary" title="View"><i class="bi bi-eye"></i></a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

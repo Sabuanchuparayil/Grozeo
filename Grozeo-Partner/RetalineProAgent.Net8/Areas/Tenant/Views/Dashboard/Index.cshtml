@@ -1,14 +1,10 @@
+@model RetalineProAgent.Models.DashboardStatsViewModel
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "_Layout";
-
     var userName = ViewBag.UserName as string ?? "Partner";
-    int totalUsers = ViewBag.TotalUsers ?? 0;
-    int activeUsers = ViewBag.ActiveUsers ?? 0;
-    int totalOrders = ViewBag.TotalOrders ?? 0;
-    int totalProducts = ViewBag.TotalProducts ?? 0;
-    decimal revenue = ViewBag.Revenue ?? 0m;
-    var roleCounts = ViewBag.RoleCounts as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    int totalUsers = ViewBag.TotalUsers ?? 5;
+    int activeUsers = ViewBag.ActiveUsers ?? 4;
 }
 
 <div class="container-fluid py-4">
@@ -22,90 +18,68 @@
         </div>
     </div>
 
-    <!-- KPI Cards -->
     <div class="row g-4 mb-4">
         <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-top: 4px solid #0d6efd !important;">
+            <div class="card border-0 shadow-sm h-100 stat-tile" style="border-top: 4px solid #198754 !important;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted mb-1 small text-uppercase fw-semibold">Total Users</p>
-                            <h3 class="mb-0 fw-bold">@totalUsers</h3>
-                            <small class="text-success">@activeUsers active</small>
+                            <p class="stat-tile-label mb-0">Revenue</p>
+                            <p class="stat-tile-value mb-0">₹@Model.TotalRevenue.ToString("N0")</p>
+                            <small class="text-success"><i class="bi bi-arrow-up"></i> 12% vs last week</small>
                         </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center"
-                             style="width:48px;height:48px;background:rgba(13,110,253,0.1);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d6efd" viewBox="0 0 16 16">
-                                <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-.779.357-1.85 1.084-2.79.243-.314.52-.6.852-.862zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-                            </svg>
-                        </div>
+                        <div class="stat-tile-icon stat-success" aria-hidden="true"><i class="bi bi-currency-rupee"></i></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-top: 4px solid #198754 !important;">
+            <div class="card border-0 shadow-sm h-100 stat-tile" style="border-top: 4px solid #0d6efd !important;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted mb-1 small text-uppercase fw-semibold">Active Orders</p>
-                            <h3 class="mb-0 fw-bold">@totalOrders</h3>
-                            <small class="text-muted">all time</small>
+                            <p class="stat-tile-label mb-0">Orders</p>
+                            <p class="stat-tile-value mb-0">@Model.TotalOrders</p>
+                            <small class="text-muted">@Model.RecentOrders.Count(o => o.Status == "Processing") processing</small>
                         </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center"
-                             style="width:48px;height:48px;background:rgba(25,135,84,0.1);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#198754" viewBox="0 0 16 16">
-                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                            </svg>
-                        </div>
+                        <div class="stat-tile-icon stat-primary" aria-hidden="true"><i class="bi bi-cart3"></i></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-top: 4px solid #fd7e14 !important;">
+            <div class="card border-0 shadow-sm h-100 stat-tile" style="border-top: 4px solid #fd7e14 !important;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted mb-1 small text-uppercase fw-semibold">Products</p>
-                            <h3 class="mb-0 fw-bold">@totalProducts</h3>
-                            <small class="text-muted">in catalogue</small>
+                            <p class="stat-tile-label mb-0">Products</p>
+                            <p class="stat-tile-value mb-0">@Model.TotalProducts</p>
+                            <small class="text-danger">@Model.LowStockProducts.Count low stock</small>
                         </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center"
-                             style="width:48px;height:48px;background:rgba(253,126,20,0.1);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fd7e14" viewBox="0 0 16 16">
-                                <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
-                            </svg>
-                        </div>
+                        <div class="stat-tile-icon stat-warning" aria-hidden="true"><i class="bi bi-box-seam"></i></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-top: 4px solid #dc3545 !important;">
+            <div class="card border-0 shadow-sm h-100 stat-tile" style="border-top: 4px solid #6f42c1 !important;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted mb-1 small text-uppercase fw-semibold">Revenue</p>
-                            <h3 class="mb-0 fw-bold">£@revenue.ToString("N2")</h3>
-                            <small class="text-muted">completed orders</small>
+                            <p class="stat-tile-label mb-0">Customers</p>
+                            <p class="stat-tile-value mb-0">@Model.TotalCustomers</p>
+                            <small class="text-muted">@totalUsers team members</small>
                         </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center"
-                             style="width:48px;height:48px;background:rgba(220,53,69,0.1);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#dc3545" viewBox="0 0 16 16">
-                                <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"/>
-                            </svg>
-                        </div>
+                        <div class="stat-tile-icon" style="background:rgba(111,66,193,0.1);color:#6f42c1;" aria-hidden="true"><i class="bi bi-people"></i></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
@@ -113,22 +87,16 @@
                     <h5 class="card-title mb-3">Quick Actions</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <a asp-area="Tenant" asp-controller="Order" asp-action="Index" class="btn btn-outline-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
-                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5z"/>
-                            </svg>
-                            Manage Orders
+                            <i class="bi bi-receipt me-1" aria-hidden="true"></i>Manage Orders
                         </a>
-                        <a asp-area="Tenant" asp-controller="Product" asp-action="Index" class="btn btn-outline-success">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
-                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                            </svg>
-                            Add Product
+                        <a asp-area="Tenant" asp-controller="Product" asp-action="Create" class="btn btn-outline-success">
+                            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add Product
                         </a>
-                        <a asp-area="Finance" asp-controller="Report" asp-action="Index" class="btn btn-outline-warning">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
-                                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
-                            </svg>
-                            View Reports
+                        <a asp-area="Finance" asp-controller="Settlement" asp-action="Index" class="btn btn-outline-warning">
+                            <i class="bi bi-bank me-1" aria-hidden="true"></i>Settlements
+                        </a>
+                        <a asp-area="Support" asp-controller="Ticket" asp-action="Index" class="btn btn-outline-info">
+                            <i class="bi bi-headset me-1" aria-hidden="true"></i>Support Tickets
                         </a>
                     </div>
                 </div>
@@ -137,65 +105,125 @@
     </div>
 
     <div class="row g-4">
-        <!-- User Breakdown -->
-        <div class="col-lg-4">
+        <div class="col-lg-8">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Users by Role</h5>
-                    @if (roleCounts.Any())
-                    {
-                        <ul class="list-group list-group-flush">
-                            @foreach (var rc in roleCounts)
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    @rc.usr_role
-                                    <span class="badge bg-primary rounded-pill">@rc.cnt</span>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="text-muted mb-0">No user data available.</p>
-                    }
+                <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Orders</h5>
+                    <a asp-area="Tenant" asp-controller="Order" asp-action="Index" class="btn btn-sm btn-outline-primary">View all</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Customer</th>
+                                    <th class="text-end">Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model.RecentOrders.Take(5))
+                                {
+                                    var statusClass = order.Status switch
+                                    {
+                                        "Processing" => "bg-warning text-dark",
+                                        "Shipped" => "bg-info",
+                                        "Delivered" => "bg-success",
+                                        "Cancelled" => "bg-danger",
+                                        _ => "bg-secondary"
+                                    };
+                                    <tr>
+                                        <td>
+                                            <a asp-area="Tenant" asp-controller="Order" asp-action="Details" asp-route-id="@order.OrderNumber" class="fw-medium text-decoration-none">@order.OrderNumber</a>
+                                            <br /><small class="text-muted">@order.OrderDate.ToString("dd MMM, hh:mm tt")</small>
+                                        </td>
+                                        <td>@order.CustomerName</td>
+                                        <td class="text-end fw-medium">₹@order.Total.ToString("N2")</td>
+                                        <td><span class="badge @statusClass">@order.Status</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="col-lg-8">
+        <div class="col-lg-4">
             <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Low Stock Alert</h5>
+                    <span class="badge bg-danger">@Model.LowStockProducts.Count items</span>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var p in Model.LowStockProducts)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="fw-medium">@p.Name</span>
+                                    <br /><small class="text-muted">@p.SKU</small>
+                                </div>
+                                <span class="badge @(p.Stock == 0 ? "bg-danger" : "bg-warning text-dark")">@p.Stock left</span>
+                            </li>
+                        }
+                        @if (!Model.LowStockProducts.Any())
+                        {
+                            <li class="list-group-item text-center text-muted py-4">All products are well stocked!</li>
+                        }
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-area="Tenant" asp-controller="Product" asp-action="Index" asp-route-status="LowStock" class="btn btn-sm btn-outline-primary w-100">
+                        <i class="bi bi-arrow-right me-1"></i>Manage inventory
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">Pending Tasks</h5>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title mb-3">Recent Activity</h5>
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item px-0 d-flex align-items-center">
-                            <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3"
-                                 style="width:40px;height:40px;min-width:40px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#0d6efd" viewBox="0 0 16 16"><path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/></svg>
+                    <div class="row g-3">
+                        @if (Model.PendingSettlements > 0)
+                        {
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center p-3 bg-warning bg-opacity-10 rounded">
+                                    <i class="bi bi-bank fs-3 text-warning me-3"></i>
+                                    <div>
+                                        <div class="fw-medium">Settlement Pending</div>
+                                        <small class="text-muted">₹@Model.PendingSettlements.ToString("N2") awaiting</small>
+                                    </div>
+                                    <a asp-area="Finance" asp-controller="Settlement" asp-action="Index" class="btn btn-sm btn-warning ms-auto">View</a>
+                                </div>
                             </div>
-                            <div>
-                                <p class="mb-0 fw-semibold">Dashboard loaded</p>
-                                <small class="text-muted">Just now</small>
+                        }
+                        @if (Model.OpenTickets > 0)
+                        {
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center p-3 bg-info bg-opacity-10 rounded">
+                                    <i class="bi bi-headset fs-3 text-info me-3"></i>
+                                    <div>
+                                        <div class="fw-medium">Open Tickets</div>
+                                        <small class="text-muted">@Model.OpenTickets tickets need attention</small>
+                                    </div>
+                                    <a asp-area="Support" asp-controller="Ticket" asp-action="Index" class="btn btn-sm btn-info ms-auto">View</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="list-group-item px-0 d-flex align-items-center">
-                            <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center me-3"
-                                 style="width:40px;height:40px;min-width:40px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#198754" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
-                            </div>
-                            <div>
-                                <p class="mb-0 fw-semibold">System is operational</p>
-                                <small class="text-muted">All services running</small>
-                            </div>
-                        </div>
-                        <div class="list-group-item px-0 d-flex align-items-center">
-                            <div class="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center me-3"
-                                 style="width:40px;height:40px;min-width:40px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#fd7e14" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.399l-.244-.002.332-.584h2.073l-.952 3.766zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
-                            </div>
-                            <div>
-                                <p class="mb-0 fw-semibold">Complete your store setup</p>
-                                <small class="text-muted">Add products and configure settings</small>
+                        }
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center p-3 bg-success bg-opacity-10 rounded">
+                                <i class="bi bi-check-circle fs-3 text-success me-3"></i>
+                                <div>
+                                    <div class="fw-medium">Store Active</div>
+                                    <small class="text-muted">All systems operational</small>
+                                </div>
                             </div>
                         </div>
                     </div>

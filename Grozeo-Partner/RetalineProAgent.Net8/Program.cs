@@ -57,8 +57,13 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Error");
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
     app.UseHsts();
+}
+else
+{
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions

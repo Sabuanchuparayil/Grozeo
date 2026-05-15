@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Request Settlement";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-outline-secondary me-3" aria-label="Back">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                </a>
+                <h2 class="mb-0">Request Settlement</h2>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="alert alert-info d-flex align-items-center mb-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <div>
+                            <strong>Available Balance:</strong> ₹18,750.00<br />
+                            <small class="text-muted">Settlements are processed within 2-3 business days.</small>
+                        </div>
+                    </div>
+
+                    <form asp-action="Apply" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Settlement Amount (₹) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-lg" id="amount" name="amount" 
+                                   required min="100" max="18750" step="0.01" value="18750" />
+                            <div class="form-text">Minimum: ₹100 | Maximum: ₹18,750.00</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Bank Account</label>
+                            <div class="form-control bg-light">
+                                <i class="bi bi-bank me-2"></i>HDFC Bank ****4521
+                            </div>
+                            <div class="form-text">To change bank account, go to Settings.</div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send me-1" aria-hidden="true"></i>Submit Request
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

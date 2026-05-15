@@ -1,0 +1,77 @@
+@model RetalineProAgent.Models.ProductViewModel
+@{
+    ViewData["Title"] = $"Edit {Model.Name}";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-outline-secondary me-3" aria-label="Back to products">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                </a>
+                <h2 class="mb-0">Edit Product <small class="text-muted">@Model.SKU</small></h2>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" value="@Model.Id" />
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="SKU" class="form-label">SKU <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="SKU" name="SKU" value="@Model.SKU" required readonly />
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label for="Name" class="form-label">Product Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="Category" class="form-label">Category <span class="text-danger">*</span></label>
+                                <select class="form-select" id="Category" name="Category" required>
+                                    <option value="Groceries" @(Model.Category == "Groceries" ? "selected" : "")>Groceries</option>
+                                    <option value="Beverages" @(Model.Category == "Beverages" ? "selected" : "")>Beverages</option>
+                                    <option value="Dairy" @(Model.Category == "Dairy" ? "selected" : "")>Dairy</option>
+                                    <option value="Bakery" @(Model.Category == "Bakery" ? "selected" : "")>Bakery</option>
+                                    <option value="Personal Care" @(Model.Category == "Personal Care" ? "selected" : "")>Personal Care</option>
+                                    <option value="Household" @(Model.Category == "Household" ? "selected" : "")>Household</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="Price" class="form-label">Price (₹) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="Price" name="Price" value="@Model.Price" required min="0" step="0.01" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="Stock" class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="Stock" name="Stock" value="@Model.Stock" min="0" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="Status" class="form-label">Status</label>
+                                <select class="form-select" id="Status" name="Status">
+                                    <option value="Active" @(Model.Status == "Active" ? "selected" : "")>Active</option>
+                                    <option value="Draft" @(Model.Status == "Draft" ? "selected" : "")>Draft</option>
+                                    <option value="Out of Stock" @(Model.Status == "Out of Stock" ? "selected" : "")>Out of Stock</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-1" aria-hidden="true"></i>Save Changes
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

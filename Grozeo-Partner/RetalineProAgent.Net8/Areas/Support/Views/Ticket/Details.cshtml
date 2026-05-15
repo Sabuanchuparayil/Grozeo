@@ -1,0 +1,135 @@
+@model RetalineProAgent.Models.TicketViewModel
+@{
+    ViewData["Title"] = $"Ticket {Model.TicketNumber}";
+    var priorityClass = Model.Priority switch
+    {
+        "High" => "bg-danger",
+        "Medium" => "bg-warning text-dark",
+        "Low" => "bg-info",
+        _ => "bg-secondary"
+    };
+    var statusClass = Model.Status switch
+    {
+        "Open" => "bg-danger",
+        "In Progress" => "bg-primary",
+        "Pending" => "bg-warning text-dark",
+        "Escalated" => "bg-info",
+        "Resolved" => "bg-success",
+        _ => "bg-secondary"
+    };
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-outline-secondary me-3" aria-label="Back">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                </a>
+                <div>
+                    <h4 class="mb-0 fw-bold">@Model.TicketNumber</h4>
+                    <span class="badge @statusClass me-1">@Model.Status</span>
+                    <span class="badge @priorityClass">@Model.Priority Priority</span>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">@Model.Subject</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center me-3" style="width:40px;height:40px;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div>
+                            <div class="fw-medium">@Model.CustomerName</div>
+                            <small class="text-muted">Opened @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</small>
+                        </div>
+                    </div>
+                    <hr />
+                    <p class="mb-0">
+                        The customer reported an issue regarding their recent order. They mentioned that the delivery was not made on time and they had to wait for an extended period. 
+                        The customer is requesting either a refund or a re-delivery of the items.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0">Add Response</h6>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="4" placeholder="Type your response here..."></textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-primary" onclick="alert('Response sent!')">
+                                <i class="bi bi-send me-1"></i>Send Response
+                            </button>
+                            @if (Model.Status != "Resolved")
+                            {
+                                <form asp-action="Resolve" asp-route-id="@Model.TicketNumber" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-check-circle me-1"></i>Mark Resolved
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0">Ticket Details</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Status</small>
+                        <span class="badge @statusClass">@Model.Status</span>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Priority</small>
+                        <span class="badge @priorityClass">@Model.Priority</span>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Created</small>
+                        <span>@Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</span>
+                    </div>
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <div class="mb-3">
+                            <small class="text-muted d-block">Last Updated</small>
+                            <span>@Model.UpdatedAt.Value.ToString("dd MMM yyyy, hh:mm tt")</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0">Actions</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.Status != "Escalated" && Model.Status != "Resolved")
+                    {
+                        <form asp-action="Escalate" asp-route-id="@Model.TicketNumber" method="post" class="mb-2">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline-warning w-100">
+                                <i class="bi bi-arrow-up-circle me-1"></i>Escalate
+                            </button>
+                        </form>
+                    }
+                    <button class="btn btn-outline-secondary w-100" onclick="alert('Ticket assigned!')">
+                        <i class="bi bi-person-plus me-1"></i>Assign to Agent
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

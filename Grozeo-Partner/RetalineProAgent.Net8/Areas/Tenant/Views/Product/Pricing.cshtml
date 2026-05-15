@@ -1,0 +1,59 @@
+@model List<RetalineProAgent.Models.ProductViewModel>
+@{
+    ViewData["Title"] = "Product Pricing";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1 fw-bold">Pricing Management</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a asp-area="Tenant" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Index">Products</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Pricing</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+            <button class="btn btn-outline-secondary btn-sm" onclick="alert('Prices exported!')"><i class="bi bi-download me-1" aria-hidden="true"></i>Export</button>
+            <button class="btn btn-primary btn-sm" onclick="alert('Bulk update applied!')"><i class="bi bi-check-lg me-1" aria-hidden="true"></i>Save All</button>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">SKU</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Category</th>
+                            <th scope="col" class="text-end">Current Price</th>
+                            <th scope="col" class="text-end">New Price</th>
+                            <th scope="col" class="text-center">Discount %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td><code>@product.SKU</code></td>
+                                <td class="fw-medium">@product.Name</td>
+                                <td><span class="badge bg-light text-dark border">@product.Category</span></td>
+                                <td class="text-end">₹@product.Price.ToString("N2")</td>
+                                <td class="text-end" style="width:120px;">
+                                    <input type="number" class="form-control form-control-sm text-end" value="@product.Price" step="0.01" />
+                                </td>
+                                <td class="text-center" style="width:100px;">
+                                    <input type="number" class="form-control form-control-sm text-center" value="0" min="0" max="100" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

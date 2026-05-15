@@ -2,17 +2,32 @@
 @{
     ViewData["Title"] = "User Management";
     Layout = "_Layout";
+    var q = ViewBag.SearchQuery as string;
 }
 
 <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Users</h2>
-        <a asp-action="Create" class="btn btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
-                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>
-            Add User
-        </a>
+    <div class="d-flex flex-wrap justify-content-between align-items-start mb-4 gap-3">
+        <div>
+            <h4 class="mb-1 fw-bold">Users</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a asp-area="Tenant" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Users</li>
+                </ol>
+            </nav>
+            <a asp-action="Roles" class="small text-decoration-none">Role descriptions</a>
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <form method="get" asp-action="Index" class="d-flex gap-2" role="search">
+                <label for="userSearch" class="visually-hidden">Search users</label>
+                <input type="search" id="userSearch" name="q" value="@q" class="form-control form-control-sm"
+                       placeholder="Search name or email…" style="min-width:200px;" autocomplete="off" />
+                <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="bi bi-search" aria-hidden="true"></i><span class="visually-hidden"> Search</span></button>
+            </form>
+            <a asp-action="Create" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add User
+            </a>
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm">
@@ -21,13 +36,13 @@
                 <table class="table table-striped table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th>Actions</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,21 +67,19 @@
                                     <td>
                                         @if (user.usr_status == 1)
                                         {
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="badge bg-success"><i class="bi bi-check-circle me-1" aria-hidden="true"></i>Active</span>
                                         }
                                         else
                                         {
-                                            <span class="badge bg-danger">Inactive</span>
+                                            <span class="badge bg-danger"><i class="bi bi-x-circle me-1" aria-hidden="true"></i>Inactive</span>
                                         }
                                     </td>
-                                    <td class="text-muted small">—</td>
+                                    <td class="text-muted small">
+                                        @(user.usr_created_at.HasValue ? user.usr_created_at.Value.ToString("dd MMM yyyy") : "N/A")
+                                    </td>
                                     <td>
                                         <a asp-action="Edit" asp-route-id="@user.usr_id" class="btn btn-sm btn-outline-primary">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="me-1" viewBox="0 0 16 16">
-                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                            </svg>
-                                            Edit
+                                            <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>Edit
                                         </a>
                                     </td>
                                 </tr>
@@ -75,7 +88,18 @@
                         else
                         {
                             <tr>
-                                <td colspan="7" class="text-center text-muted py-4">No users found.</td>
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="empty-state py-2">
+                                        <i class="bi bi-people" aria-hidden="true"></i>
+                                        <h3 class="h5 mt-2">No users found</h3>
+                                        <p class="text-muted mb-3">@(string.IsNullOrWhiteSpace(q) ? "Add your first administrator or staff member." : "Try a different search term.")</p>
+                                        @if (!string.IsNullOrWhiteSpace(q))
+                                        {
+                                            <a asp-action="Index" class="btn btn-outline-secondary btn-sm me-2">Clear search</a>
+                                        }
+                                        <a asp-action="Create" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add user</a>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -84,3 +108,16 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+        var t = e.target;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+        e.preventDefault();
+        var el = document.getElementById('userSearch');
+        if (el) el.focus();
+    });
+</script>
+}

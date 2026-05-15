@@ -1,0 +1,211 @@
+@model RetalineProAgent.Models.OrderViewModel
+@{
+    ViewData["Title"] = $"Order {Model.OrderNumber}";
+    var statusClass = Model.Status switch
+    {
+        "Processing" => "bg-warning text-dark",
+        "Shipped" => "bg-info",
+        "Delivered" => "bg-success",
+        "Cancelled" => "bg-danger",
+        _ => "bg-secondary"
+    };
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <a asp-action="Index" class="btn btn-outline-secondary" aria-label="Back to orders">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+            </a>
+            <div>
+                <h4 class="mb-1 fw-bold">Order @Model.OrderNumber</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 small">
+                        <li class="breadcrumb-item"><a asp-area="Tenant" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a asp-action="Index">Orders</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@Model.OrderNumber</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+            @if (Model.Status == "Processing")
+            {
+                <form asp-action="Hold" asp-route-id="@Model.OrderNumber" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-warning btn-sm"><i class="bi bi-pause-circle me-1"></i>Hold</button>
+                </form>
+                <form asp-action="Cancel" asp-route-id="@Model.OrderNumber" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this order?')">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-x-circle me-1"></i>Cancel</button>
+                </form>
+            }
+            <button class="btn btn-outline-secondary btn-sm" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold">Order Items</h6>
+                    <span class="badge @statusClass">@Model.Status</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">SKU</th>
+                                    <th scope="col" class="text-center">Qty</th>
+                                    <th scope="col" class="text-end">Unit Price</th>
+                                    <th scope="col" class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td class="fw-medium">@item.ProductName</td>
+                                        <td><code>@item.SKU</code></td>
+                                        <td class="text-center">@item.Quantity</td>
+                                        <td class="text-end">₹@item.UnitPrice.ToString("N2")</td>
+                                        <td class="text-end fw-medium">₹@item.Total.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="table-light">
+                                <tr>
+                                    <td colspan="4" class="text-end fw-bold">Subtotal</td>
+                                    <td class="text-end fw-bold">₹@Model.Items.Sum(i => i.Total).ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">Delivery</td>
+                                    <td class="text-end">₹49.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end fw-bold fs-5">Total</td>
+                                    <td class="text-end fw-bold fs-5 text-success">₹@Model.Total.ToString("N2")</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0 fw-bold">Order Timeline</h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="d-flex mb-3">
+                            <div class="me-3">
+                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width:32px;height:32px;">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="fw-medium">Order Placed</div>
+                                <small class="text-muted">@Model.OrderDate.ToString("dd MMM yyyy, hh:mm tt")</small>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <div class="me-3">
+                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width:32px;height:32px;">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="fw-medium">Payment Confirmed</div>
+                                <small class="text-muted">@Model.OrderDate.AddMinutes(2).ToString("dd MMM yyyy, hh:mm tt") via @Model.PaymentMethod</small>
+                            </div>
+                        </div>
+                        @if (Model.Status != "Processing" && Model.Status != "Cancelled")
+                        {
+                            <div class="d-flex mb-3">
+                                <div class="me-3">
+                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width:32px;height:32px;">
+                                        <i class="bi bi-check"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="fw-medium">Shipped</div>
+                                    <small class="text-muted">@Model.OrderDate.AddHours(3).ToString("dd MMM yyyy, hh:mm tt")</small>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.Status == "Delivered")
+                        {
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width:32px;height:32px;">
+                                        <i class="bi bi-check"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="fw-medium">Delivered</div>
+                                    <small class="text-muted">@Model.OrderDate.AddDays(1).ToString("dd MMM yyyy, hh:mm tt")</small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0 fw-bold">Customer Details</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center me-3" style="width:48px;height:48px;">
+                            <i class="bi bi-person fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="fw-medium">@Model.CustomerName</div>
+                            <small class="text-muted">@Model.CustomerEmail</small>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="mb-2">
+                        <small class="text-muted d-block">Phone</small>
+                        <span>+91 98765 43210</span>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Delivery Address</small>
+                        <span>123, MG Road, Koramangala<br />Bangalore, Karnataka 560034</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0 fw-bold">Payment Summary</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Payment Method</span>
+                        <span class="fw-medium">@Model.PaymentMethod</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Transaction ID</span>
+                        <code>TXN@Model.OrderNumber.Replace("GRZ-", "")</code>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Payment Status</span>
+                        <span class="badge bg-success">Paid</span>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold">Amount Paid</span>
+                        <span class="fw-bold text-success fs-5">₹@Model.Total.ToString("N2")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

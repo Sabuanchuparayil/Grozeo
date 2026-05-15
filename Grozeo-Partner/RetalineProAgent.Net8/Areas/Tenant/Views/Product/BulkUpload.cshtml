@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Bulk Upload Products";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-outline-secondary me-3" aria-label="Back to products">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                </a>
+                <h2 class="mb-0">Bulk Upload</h2>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-cloud-upload display-1 text-primary opacity-50"></i>
+                        <h5 class="mt-3">Upload Product CSV</h5>
+                        <p class="text-muted">Upload a CSV file to add multiple products at once</p>
+                    </div>
+
+                    <form>
+                        <div class="mb-4">
+                            <label for="csvFile" class="form-label">Select CSV File</label>
+                            <input type="file" class="form-control" id="csvFile" accept=".csv" />
+                            <div class="form-text">Maximum 1000 products per upload. File size limit: 5MB</div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-primary" onclick="alert('Upload simulated! In production, this would process your CSV file.')">
+                                <i class="bi bi-upload me-1" aria-hidden="true"></i>Upload & Process
+                            </button>
+                            <a href="#" class="btn btn-outline-secondary">
+                                <i class="bi bi-download me-1" aria-hidden="true"></i>Download Template
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0 fw-bold">CSV Format Guide</h6>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">Your CSV file should have the following columns:</p>
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Column</th>
+                                <th>Required</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SKU</td><td>Yes</td><td>GRZ-RICE-001</td></tr>
+                            <tr><td>Name</td><td>Yes</td><td>Premium Basmati Rice 5kg</td></tr>
+                            <tr><td>Category</td><td>Yes</td><td>Groceries</td></tr>
+                            <tr><td>Price</td><td>Yes</td><td>450.00</td></tr>
+                            <tr><td>Stock</td><td>No</td><td>100</td></tr>
+                            <tr><td>Description</td><td>No</td><td>Long grain aged rice</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

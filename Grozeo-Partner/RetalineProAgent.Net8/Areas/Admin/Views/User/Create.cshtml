@@ -7,10 +7,8 @@
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-6">
             <div class="d-flex align-items-center mb-4">
-                <a asp-action="Index" class="btn btn-outline-secondary me-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                    </svg>
+                <a asp-action="Index" class="btn btn-outline-secondary me-3" aria-label="Back to users">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
                 </a>
                 <h2 class="mb-0">Create User</h2>
             </div>
@@ -19,37 +17,41 @@
             {
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     @ViewBag.Error
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
 
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
-                    <form asp-action="Create" method="post" id="createUserForm">
+                    <form asp-action="Create" method="post" id="createUserForm" novalidate>
                         @Html.AntiForgeryToken()
 
                         <div class="mb-3">
                             <label for="usr_name" class="form-label">Full Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="usr_name" name="usr_name" required
-                                   placeholder="Enter full name" />
+                                   placeholder="Enter full name" autocomplete="name" />
+                            <div class="invalid-feedback">Full name is required.</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="usr_email" class="form-label">Email Address <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="usr_email" name="usr_email" required
-                                   placeholder="Enter email address" />
+                                   placeholder="Enter email address" autocomplete="email" />
+                            <div class="invalid-feedback">Please enter a valid email address.</div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" id="password" name="password" required
-                                       minlength="6" placeholder="Minimum 6 characters" />
+                                       minlength="6" placeholder="Minimum 6 characters" autocomplete="new-password" />
+                                <div class="invalid-feedback">Password must be at least 6 characters.</div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required
-                                       minlength="6" placeholder="Re-enter password" />
+                                       minlength="6" placeholder="Re-enter password" autocomplete="new-password" />
+                                <div class="invalid-feedback" id="confirmPasswordFeedback">Please confirm your password.</div>
                             </div>
                         </div>
 
@@ -63,6 +65,7 @@
                                     <option value="Finance">Finance</option>
                                     <option value="Support">Support</option>
                                 </select>
+                                <div class="invalid-feedback">Please select a role.</div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="usr_branch_id" class="form-label">Branch ID</label>
@@ -82,10 +85,7 @@
 
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                </svg>
-                                Create User
+                                <i class="bi bi-check-lg me-1" aria-hidden="true"></i>Create User
                             </button>
                             <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
                         </div>
@@ -98,16 +98,63 @@
 
 @section Scripts {
 <script>
-    $(function () {
-        $('#createUserForm').on('submit', function (e) {
-            var pw = $('#password').val();
-            var cpw = $('#confirmPassword').val();
-            if (pw !== cpw) {
+    (function () {
+        var form = document.getElementById('createUserForm');
+        var pw = document.getElementById('password');
+        var cpw = document.getElementById('confirmPassword');
+        var cpwFeedback = document.getElementById('confirmPasswordFeedback');
+
+        function clearFieldInvalid(field) {
+            field.classList.remove('is-invalid');
+        }
+
+        form.querySelectorAll('input, select').forEach(function (el) {
+            el.addEventListener('input', function () { clearFieldInvalid(el); });
+            el.addEventListener('change', function () { clearFieldInvalid(el); });
+        });
+
+        form.addEventListener('submit', function (e) {
+            form.querySelectorAll('.is-invalid').forEach(function (el) {
+                el.classList.remove('is-invalid');
+            });
+
+            var isValid = true;
+            var firstInvalid = null;
+
+            form.querySelectorAll('[required], [minlength]').forEach(function (field) {
+                if (field.id === 'confirmPassword') return;
+                var valid = field.checkValidity();
+                if (!valid) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                    if (!firstInvalid) firstInvalid = field;
+                }
+            });
+
+            if (!cpw.value) {
+                cpwFeedback.textContent = 'Please confirm your password.';
+                cpw.classList.add('is-invalid');
+                isValid = false;
+                if (!firstInvalid) firstInvalid = cpw;
+            } else if (cpw.value.length < 6) {
+                cpwFeedback.textContent = 'Password must be at least 6 characters.';
+                cpw.classList.add('is-invalid');
+                isValid = false;
+                if (!firstInvalid) firstInvalid = cpw;
+            } else if (pw.value !== cpw.value) {
+                cpwFeedback.textContent = 'Passwords do not match.';
+                pw.classList.add('is-invalid');
+                cpw.classList.add('is-invalid');
+                isValid = false;
+                if (!firstInvalid) firstInvalid = cpw;
+            }
+
+            if (!isValid) {
                 e.preventDefault();
-                alert('Passwords do not match.');
-                $('#confirmPassword').focus();
+                e.stopPropagation();
+                if (firstInvalid) firstInvalid.focus();
             }
         });
-    });
+    })();
 </script>
 }

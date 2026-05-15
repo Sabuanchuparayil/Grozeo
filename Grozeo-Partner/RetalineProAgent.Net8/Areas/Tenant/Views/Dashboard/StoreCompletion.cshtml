@@ -1,0 +1,79 @@
+@{
+    ViewData["Title"] = "Store Setup";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1 fw-bold">Store Setup Progress</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Store Setup</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0">Setup Progress</h5>
+                        <span class="badge bg-warning text-dark fs-6">75% Complete</span>
+                    </div>
+                    <div class="progress mb-4" style="height:10px;">
+                        <div class="progress-bar bg-success" style="width:75%"></div>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex align-items-center px-0 py-3">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width:32px;height:32px;">
+                                <i class="bi bi-check"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-medium">Create your account</div>
+                                <small class="text-muted">Account created and verified</small>
+                            </div>
+                            <span class="badge bg-success">Done</span>
+                        </div>
+
+                        <div class="list-group-item d-flex align-items-center px-0 py-3">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width:32px;height:32px;">
+                                <i class="bi bi-check"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-medium">Add your first products</div>
+                                <small class="text-muted">12 products added</small>
+                            </div>
+                            <span class="badge bg-success">Done</span>
+                        </div>
+
+                        <div class="list-group-item d-flex align-items-center px-0 py-3">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width:32px;height:32px;">
+                                <i class="bi bi-check"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-medium">Configure payment settings</div>
+                                <small class="text-muted">UPI and Card payments enabled</small>
+                            </div>
+                            <span class="badge bg-success">Done</span>
+                        </div>
+
+                        <div class="list-group-item d-flex align-items-center px-0 py-3">
+                            <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3" style="width:32px;height:32px;">
+                                <i class="bi bi-exclamation"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-medium">Set up delivery zones</div>
+                                <small class="text-muted">Configure delivery areas and charges</small>
+                            </div>
+                            <a asp-area="Tenant" asp-controller="Delivery" asp-action="Index" class="btn btn-sm btn-primary">Complete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

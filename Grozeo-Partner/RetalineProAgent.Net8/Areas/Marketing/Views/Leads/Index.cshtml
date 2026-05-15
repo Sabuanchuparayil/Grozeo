@@ -9,46 +9,66 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 small">
                     <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new{area="Tenant"})">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Leads</li>
+                    <li class="breadcrumb-item active" aria-current="page">Leads</li>
                 </ol>
             </nav>
         </div>
         <div class="d-flex gap-2 mt-2 mt-md-0">
-            <button class="btn btn-outline-secondary btn-sm" disabled><i class="bi bi-upload me-1"></i>Import</button>
-            <button class="btn btn-primary btn-sm" disabled><i class="bi bi-plus-lg me-1"></i>Add Lead</button>
+            <a asp-action="Import" class="btn btn-outline-secondary btn-sm"><i class="bi bi-upload me-1" aria-hidden="true"></i>Import</a>
+            <a asp-action="Assign" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add Lead</a>
         </div>
     </div>
 
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Total Leads</div>
-                    <div class="fs-4 fw-bold">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Total Leads</div>
+                            <div class="stat-tile-value">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-secondary" aria-hidden="true"><i class="bi bi-funnel"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">New</div>
-                    <div class="fs-4 fw-bold text-primary">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">New</div>
+                            <div class="stat-tile-value text-primary">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-primary" aria-hidden="true"><i class="bi bi-stars"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Qualified</div>
-                    <div class="fs-4 fw-bold text-success">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Qualified</div>
+                            <div class="stat-tile-value text-success">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-success" aria-hidden="true"><i class="bi bi-patch-check"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="text-muted small">Converted</div>
-                    <div class="fs-4 fw-bold text-info">0</div>
+            <div class="card border-0 shadow-sm h-100 stat-tile">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-tile-label">Converted</div>
+                            <div class="stat-tile-value text-info">0</div>
+                        </div>
+                        <div class="stat-tile-icon stat-info" aria-hidden="true"><i class="bi bi-trophy"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,20 +80,22 @@
                 <table class="table table-hover table-striped align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Name</th>
-                            <th>Source</th>
-                            <th class="text-center">Score</th>
-                            <th>Status</th>
-                            <th>Assigned To</th>
-                            <th class="text-center">Actions</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Source</th>
+                            <th scope="col" class="text-center">Score</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Assigned To</th>
+                            <th scope="col" class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td colspan="6">
-                                <div class="text-center py-5">
-                                    <i class="bi bi-funnel display-4 text-muted"></i>
-                                    <p class="text-muted mt-3 mb-0">No leads captured yet. Add leads manually or import them from a file.</p>
+                                <div class="empty-state text-center py-5 px-3">
+                                    <i class="bi bi-funnel" aria-hidden="true"></i>
+                                    <p class="text-muted mt-3 mb-3">No leads captured yet. Add leads manually or import them from a file.</p>
+                                    <a asp-action="Assign" class="btn btn-primary btn-sm me-2"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add lead</a>
+                                    <a asp-action="Import" class="btn btn-outline-secondary btn-sm">Import leads</a>
                                 </div>
                             </td>
                         </tr>
