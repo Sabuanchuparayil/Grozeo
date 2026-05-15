@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using MySql.Data.MySqlClient;
 
 namespace DataEntry
