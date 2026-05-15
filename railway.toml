@@ -1,0 +1,10 @@
+# Railway Multi-Service Configuration
+# Each service should be created via Railway Dashboard pointing to this repo
+# Set the "Root Directory" in Railway to the service folder
+
+[build]
+builder = "dockerfile"
+
+[deploy]
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
