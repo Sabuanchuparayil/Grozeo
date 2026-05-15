@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace RetalineProAgent.Areas.Support.Controllers;
 
 [Area("Support")]
-[Authorize(Policy = "TenantAdmin")]
+[Authorize(Policy = "SupportAgent")]
 public class TicketController : Controller
 {
 
