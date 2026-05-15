@@ -7,27 +7,8 @@ namespace RetalineProAgent.Areas.Finance.Controllers;
 [Authorize(Policy = "FinanceUser")]
 public class VoucherController : Controller
 {
-
-    public IActionResult Index(int? id)
-    {
-        return View();
-    }
-
-    public IActionResult Entry(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Details(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult AutoPosting(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
+    public IActionResult Index(int? id) => View();
+    public IActionResult Entry(int? id) => View();
+    public IActionResult Details(int? id) => View();
+    public IActionResult AutoPosting(int? id) => View();
 }

@@ -37,29 +37,30 @@ public static class DatabaseInitializer
                     usr_updated_at  DATETIME      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                 )");
 
-            var count = await conn.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM finascop_usr_master");
-            if (count == 0)
+            logger.LogInformation("Ensuring default users exist in finascop_usr_master");
+
+            var defaultUsers = new[]
             {
-                logger.LogInformation("Seeding default users into finascop_usr_master");
+                new { Name = "Super Admin",    Email = "admin@grozeo.com",   Role = "SuperAdmin", Password = "Admin@123" },
+                new { Name = "Tenant Manager", Email = "tenant@grozeo.com",  Role = "TenantAdmin", Password = "Tenant@123" },
+                new { Name = "Finance User",   Email = "finance@grozeo.com", Role = "Finance",    Password = "Finance@123" },
+                new { Name = "Support Agent",  Email = "support@grozeo.com", Role = "Support",    Password = "Support@123" },
+            };
 
-                var users = new[]
-                {
-                    new { Name = "Super Admin",    Email = "admin@grozeo.com",   Role = "SuperAdmin", Password = "Admin@123" },
-                    new { Name = "Tenant Manager", Email = "tenant@grozeo.com",  Role = "TenantAdmin", Password = "Tenant@123" },
-                    new { Name = "Finance User",   Email = "finance@grozeo.com", Role = "Finance",    Password = "Finance@123" },
-                    new { Name = "Support Agent",  Email = "support@grozeo.com", Role = "Support",    Password = "Support@123" },
-                };
-
-                foreach (var u in users)
+            foreach (var u in defaultUsers)
+            {
+                var exists = await conn.ExecuteScalarAsync<int>(
+                    "SELECT COUNT(*) FROM finascop_usr_master WHERE usr_email = @Email",
+                    new { u.Email });
+                if (exists == 0)
                 {
                     var hash = BCrypt.Net.BCrypt.HashPassword(u.Password);
                     await conn.ExecuteAsync(
                         @"INSERT INTO finascop_usr_master (usr_name, usr_email, usr_password_hash, usr_role, usr_branch_id, usr_status)
                           VALUES (@Name, @Email, @Hash, @Role, 0, 1)",
                         new { u.Name, u.Email, Hash = hash, u.Role });
+                    logger.LogInformation("Seeded user {Email} with role {Role}", u.Email, u.Role);
                 }
-
-                logger.LogInformation("Seeded {Count} default users", users.Length);
             }
         }
         catch (Exception ex)

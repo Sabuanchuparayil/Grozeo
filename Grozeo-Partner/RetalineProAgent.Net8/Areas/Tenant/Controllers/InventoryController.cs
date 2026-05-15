@@ -7,33 +7,9 @@ namespace RetalineProAgent.Areas.Tenant.Controllers;
 [Authorize(Policy = "TenantAdmin")]
 public class InventoryController : Controller
 {
-
-    public IActionResult Index(int? id)
-    {
-        return View();
-    }
-
-    public IActionResult StockIn(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult StockOut(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Transfer(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Barcode(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
+    public IActionResult Index(int? id) => View();
+    public IActionResult StockIn(int? id) => View();
+    public IActionResult StockOut(int? id) => View();
+    public IActionResult Transfer(int? id) => View();
+    public IActionResult Barcode(int? id) => View();
 }

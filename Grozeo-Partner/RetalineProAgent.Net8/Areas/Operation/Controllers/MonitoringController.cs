@@ -7,27 +7,8 @@ namespace RetalineProAgent.Areas.Operation.Controllers;
 [Authorize(Policy = "TenantAdmin")]
 public class MonitoringController : Controller
 {
-
-    public IActionResult Index(int? id)
-    {
-        return View();
-    }
-
-    public IActionResult PackingDelays(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult DeliveryDelays(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult LiveOrders(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
+    public IActionResult Index(int? id) => View();
+    public IActionResult PackingDelays(int? id) => View();
+    public IActionResult DeliveryDelays(int? id) => View();
+    public IActionResult LiveOrders(int? id) => View();
 }

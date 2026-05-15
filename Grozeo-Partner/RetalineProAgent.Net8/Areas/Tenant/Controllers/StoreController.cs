@@ -7,33 +7,9 @@ namespace RetalineProAgent.Areas.Tenant.Controllers;
 [Authorize(Policy = "TenantAdmin")]
 public class StoreController : Controller
 {
-
-    public IActionResult Index(int? id)
-    {
-        return View();
-    }
-
-    public IActionResult Settings(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Branches(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Domains(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Subscription(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
+    public IActionResult Index(int? id) => View();
+    public IActionResult Settings(int? id) => View();
+    public IActionResult Branches(int? id) => View();
+    public IActionResult Domains(int? id) => View();
+    public IActionResult Subscription(int? id) => View();
 }

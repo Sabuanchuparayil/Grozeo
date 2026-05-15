@@ -7,21 +7,7 @@ namespace RetalineProAgent.Areas.Admin.Controllers;
 [Authorize(Policy = "SuperAdmin")]
 public class StoreController : Controller
 {
-
-    public IActionResult Index(int? id)
-    {
-        return View();
-    }
-
-    public IActionResult Domains(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Config(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
+    public IActionResult Index(int? id) => View();
+    public IActionResult Domains(int? id) => View();
+    public IActionResult Config(int? id) => View();
 }

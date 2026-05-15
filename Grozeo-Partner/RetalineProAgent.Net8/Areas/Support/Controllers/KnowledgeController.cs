@@ -7,21 +7,7 @@ namespace RetalineProAgent.Areas.Support.Controllers;
 [Authorize(Policy = "SupportAgent")]
 public class KnowledgeController : Controller
 {
-
-    public IActionResult Index(int? id)
-    {
-        return View();
-    }
-
-    public IActionResult Articles(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult FAQ(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
+    public IActionResult Index(int? id) => View();
+    public IActionResult Articles(int? id) => View();
+    public IActionResult FAQ(int? id) => View();
 }

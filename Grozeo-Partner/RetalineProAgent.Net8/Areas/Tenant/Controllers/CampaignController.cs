@@ -7,33 +7,9 @@ namespace RetalineProAgent.Areas.Tenant.Controllers;
 [Authorize(Policy = "TenantAdmin")]
 public class CampaignController : Controller
 {
-
-    public IActionResult Index(int? id)
-    {
-        return View();
-    }
-
-    public IActionResult Create(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Edit(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Coupon(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Sponsored(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
+    public IActionResult Index(int? id) => View();
+    public IActionResult Create(int? id) => View();
+    public IActionResult Edit(int? id) => View();
+    public IActionResult Coupon(int? id) => View();
+    public IActionResult Sponsored(int? id) => View();
 }

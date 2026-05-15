@@ -7,27 +7,8 @@ namespace RetalineProAgent.Areas.Finance.Controllers;
 [Authorize(Policy = "FinanceUser")]
 public class CostCentreController : Controller
 {
-
-    public IActionResult Index(int? id)
-    {
-        return View();
-    }
-
-    public IActionResult Entry(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Allocation(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
-
-    public IActionResult Reports(int? id)
-    {
-        TempData["Info"] = "This feature is coming soon.";
-        return RedirectToAction("Index");
-    }
+    public IActionResult Index(int? id) => View();
+    public IActionResult Entry(int? id) => View();
+    public IActionResult Allocation(int? id) => View();
+    public IActionResult Reports(int? id) => View();
 }
