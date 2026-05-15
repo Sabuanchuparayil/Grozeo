@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql gd zip intl mbstring bcmath opcache curl \
     && pecl install redis && docker-php-ext-enable redis \
-    && a2enmod rewrite headers \
+    && (a2dismod mpm_event 2>/dev/null || true) && a2enmod mpm_prefork rewrite headers \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN echo '<Directory /var/www/html>\n\
