@@ -15,7 +15,12 @@ namespace DataEntry
         {
             get
             {
-                return Environment.GetEnvironmentVariable("dbconnection");
+                var cs = Environment.GetEnvironmentVariable("dbconnection") ?? "";
+                if (!cs.Contains("Encrypt", StringComparison.OrdinalIgnoreCase))
+                    cs += ";Encrypt=false";
+                if (!cs.Contains("TrustServerCertificate", StringComparison.OrdinalIgnoreCase))
+                    cs += ";TrustServerCertificate=true";
+                return cs;
             }
         }
 

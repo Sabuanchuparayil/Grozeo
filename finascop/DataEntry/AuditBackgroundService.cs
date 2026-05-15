@@ -20,11 +20,12 @@ namespace DataEntry
             while (!stoppingToken.IsCancellationRequested)
             {
                 var now = DateTime.UtcNow;
-                var nextRun = now.Date.AddDays(1).AddMinutes(5);
+                var nextRun = now.Date.AddMinutes(5); // today at 00:05 UTC
+                if (nextRun <= now)
+                    nextRun = nextRun.AddDays(1);     // already past 00:05, wait for tomorrow
                 var delay = nextRun - now;
-                if (delay < TimeSpan.Zero)
-                    delay = TimeSpan.FromMinutes(1);
 
+                _logger.LogInformation("Next FinascopAudit scheduled at {NextRun} (in {Delay})", nextRun, delay);
                 await Task.Delay(delay, stoppingToken);
 
                 if (stoppingToken.IsCancellationRequested) break;

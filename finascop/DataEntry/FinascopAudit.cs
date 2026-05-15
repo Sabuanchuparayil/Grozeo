@@ -16,7 +16,7 @@ namespace DataEntry
             var yesterday = DateTime.Today.AddDays(-1);
             var today = DateTime.Today;
 
-            string sql = $"SELECT store_group_id, storeRefId FROM finascop_branch_group WHERE created_on >= @yesterday AND created_on < @today";
+            string sql = $"SELECT store_group_id, storeRefId, store_group_name FROM finascop_branch_group WHERE created_on >= @yesterday AND created_on < @today";
             List<KeyValuePair<string, object>> prms = new List<KeyValuePair<string, object>>();
             prms.Add(new KeyValuePair<string, object>("yesterday", yesterday));
             prms.Add(new KeyValuePair<string, object>("today", today));
