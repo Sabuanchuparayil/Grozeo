@@ -1,10 +1,10 @@
 .git
 .gitignore
 .do
+.DS_Store
 README.md
 db/
 logs/
 *.log
-.DS_Store
 jscache/
 vlsupload/

@@ -1,10 +1,11 @@
 .git
 .gitignore
 .do
+.DS_Store
 README.md
+azure-pipelines.yml
 db/
 logs/
 *.log
-.DS_Store
 jscache/
 vlsupload/
