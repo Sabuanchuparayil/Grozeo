@@ -18,16 +18,17 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-COPY composer.json composer.lock ./
+# Railway builds from repo root, so use full paths
+COPY Grozeo-Scheduler/composer.json Grozeo-Scheduler/composer.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 
-COPY . .
+COPY Grozeo-Scheduler/ .
 RUN composer dump-autoload --optimize
 
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-COPY docker/supervisord.conf /etc/supervisord.conf
+COPY Grozeo-Scheduler/docker/supervisord.conf /etc/supervisord.conf
 
 HEALTHCHECK --interval=60s --timeout=10s --retries=3 \
     CMD php artisan schedule:test --name="health" 2>/dev/null || curl -f http://localhost:8080/health/ping || exit 1
