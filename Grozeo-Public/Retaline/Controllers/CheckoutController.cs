@@ -161,7 +161,7 @@ namespace Retaline.Web.Controllers
             //try { placeOrder.DeliveryCharge = orderResult.Data.ShippingCharge; } catch { }
             Core.BusinessModel.API.APIModel<List<Core.BusinessModel.Order.MyOrder>> successOrder = await _orderService.GetGroupOrderDetails(checkout.OrderGroupId);
             placeOrder.SuccessOrders=successOrder.Data==null ? new List<Retaline.Core.BusinessModel.Order.MyOrder>() : successOrder.Data;
-            placeOrder = BindOrderInfo(orderData, placeOrder, paymentMethod);
+            placeOrder = await BindOrderInfo(orderData, placeOrder, paymentMethod);
             
             return View("ThankYou", placeOrder);//Json(new { result= 1 });
         }
@@ -245,11 +245,11 @@ namespace Retaline.Web.Controllers
             //try { placeOrder.DeliveryCharge = orderResult.Data.ShippingCharge; } catch { }
             var successOrder = await _orderService.GetGroupOrderDetails(orderData.OrderGroupId);
             placeOrder.SuccessOrders=successOrder.Data==null ? new List<Core.BusinessModel.Order.MyOrder>() : successOrder.Data;
-            placeOrder = BindOrderInfo(orderData, placeOrder, 1);
+            placeOrder = await BindOrderInfo(orderData, placeOrder, 1);
             return View("ThankYou", placeOrder);
         }
 
-        private PlaceOrder BindOrderInfo(Core.BusinessModel.Order.Order order, PlaceOrder orderModel, int paymentMethod)
+        private async Task<PlaceOrder> BindOrderInfo(Core.BusinessModel.Order.Order order, PlaceOrder orderModel, int paymentMethod)
         {
             if (order == null && (orderModel.SuccessOrders == null || orderModel.SuccessOrders.Count <= 0))
                 return orderModel;
