@@ -44,10 +44,11 @@ public static class DatabaseInitializer
 
             var defaultUsers = new[]
             {
-                new { Name = "Super Admin",    Email = "admin@grozeo.com",   Role = "SuperAdmin", Password = "Admin@123" },
+                new { Name = "Super Admin",    Email = "admin@grozeo.com",   Role = "SuperAdmin",  Password = "Admin@123" },
                 new { Name = "Tenant Manager", Email = "tenant@grozeo.com",  Role = "TenantAdmin", Password = "Tenant@123" },
-                new { Name = "Finance User",   Email = "finance@grozeo.com", Role = "Finance",    Password = "Finance@123" },
-                new { Name = "Support Agent",  Email = "support@grozeo.com", Role = "Support",    Password = "Support@123" },
+                new { Name = "Finance User",   Email = "finance@grozeo.com", Role = "Finance",     Password = "Finance@123" },
+                new { Name = "Support Agent",  Email = "support@grozeo.com", Role = "Support",     Password = "Support@123" },
+                new { Name = "Sabu",           Email = "mail@jsabu.com",     Role = "SuperAdmin",  Password = "Admin@123" },
             };
 
             foreach (var u in defaultUsers)
