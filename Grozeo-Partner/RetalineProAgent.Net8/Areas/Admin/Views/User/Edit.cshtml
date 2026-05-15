@@ -1,4 +1,5 @@
 @model RetalineProAgent.Models.AppUser
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Edit User";
     Layout = "_Layout";
@@ -63,11 +64,10 @@
                             <div class="col-md-6 mb-3">
                                 <label for="usr_role" class="form-label">Role <span class="text-danger">*</span></label>
                                 <select class="form-select" id="usr_role" name="usr_role" required>
-                                    @{ var role = Model.usr_role ?? ""; }
-                                    <option value="SuperAdmin" selected="@(role == "SuperAdmin")">SuperAdmin</option>
-                                    <option value="TenantAdmin" selected="@(role == "TenantAdmin")">TenantAdmin</option>
-                                    <option value="Finance" selected="@(role == "Finance")">Finance</option>
-                                    <option value="Support" selected="@(role == "Support")">Support</option>
+                                    <option value="SuperAdmin" @(Model.usr_role == "SuperAdmin" ? "selected" : "")>SuperAdmin</option>
+                                    <option value="TenantAdmin" @(Model.usr_role == "TenantAdmin" ? "selected" : "")>TenantAdmin</option>
+                                    <option value="Finance" @(Model.usr_role == "Finance" ? "selected" : "")>Finance</option>
+                                    <option value="Support" @(Model.usr_role == "Support" ? "selected" : "")>Support</option>
                                 </select>
                                 <div class="invalid-feedback">Please select a role.</div>
                             </div>

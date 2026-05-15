@@ -1,4 +1,5 @@
 @model RetalineProAgent.Models.ProductViewModel
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = $"Edit {Model.Name}";
 }
@@ -34,13 +35,12 @@
                             <div class="col-md-6 mb-3">
                                 <label for="Category" class="form-label">Category <span class="text-danger">*</span></label>
                                 <select class="form-select" id="Category" name="Category" required>
-                                    @{ var cat = Model.Category ?? ""; }
-                                    <option value="Groceries" selected="@(cat == "Groceries")">Groceries</option>
-                                    <option value="Beverages" selected="@(cat == "Beverages")">Beverages</option>
-                                    <option value="Dairy" selected="@(cat == "Dairy")">Dairy</option>
-                                    <option value="Bakery" selected="@(cat == "Bakery")">Bakery</option>
-                                    <option value="Personal Care" selected="@(cat == "Personal Care")">Personal Care</option>
-                                    <option value="Household" selected="@(cat == "Household")">Household</option>
+                                    <option value="Groceries" @(Model.Category == "Groceries" ? "selected" : "")>Groceries</option>
+                                    <option value="Beverages" @(Model.Category == "Beverages" ? "selected" : "")>Beverages</option>
+                                    <option value="Dairy" @(Model.Category == "Dairy" ? "selected" : "")>Dairy</option>
+                                    <option value="Bakery" @(Model.Category == "Bakery" ? "selected" : "")>Bakery</option>
+                                    <option value="Personal Care" @(Model.Category == "Personal Care" ? "selected" : "")>Personal Care</option>
+                                    <option value="Household" @(Model.Category == "Household" ? "selected" : "")>Household</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -57,10 +57,9 @@
                             <div class="col-md-6 mb-3">
                                 <label for="Status" class="form-label">Status</label>
                                 <select class="form-select" id="Status" name="Status">
-                                    @{ var status = Model.Status ?? ""; }
-                                    <option value="Active" selected="@(status == "Active")">Active</option>
-                                    <option value="Draft" selected="@(status == "Draft")">Draft</option>
-                                    <option value="Out of Stock" selected="@(status == "Out of Stock")">Out of Stock</option>
+                                    <option value="Active" @(Model.Status == "Active" ? "selected" : "")>Active</option>
+                                    <option value="Draft" @(Model.Status == "Draft" ? "selected" : "")>Draft</option>
+                                    <option value="Out of Stock" @(Model.Status == "Out of Stock" ? "selected" : "")>Out of Stock</option>
                                 </select>
                             </div>
                         </div>
