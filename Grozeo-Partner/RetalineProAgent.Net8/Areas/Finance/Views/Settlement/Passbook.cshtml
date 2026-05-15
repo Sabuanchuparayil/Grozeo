@@ -39,22 +39,24 @@
                     </thead>
                     <tbody>
                         @{
-                            decimal balance = 176980m;
+                            var completedSettlements = Model.Where(x => x.Status == "Completed").OrderByDescending(x => x.Date).ToList();
+                            decimal openingBalance = 10000m;
+                            decimal runningBalance = openingBalance + completedSettlements.Sum(x => x.Amount);
                         }
-                        @foreach (var s in Model.Where(x => x.Status == "Completed").OrderByDescending(x => x.Date))
+                        @foreach (var s in completedSettlements)
                         {
                             <tr>
                                 <td>@s.Date.ToString("dd MMM yyyy")</td>
                                 <td>Settlement @s.SettlementNumber<br /><small class="text-muted">UTR: @s.UTR</small></td>
                                 <td class="text-end text-success">₹@s.Amount.ToString("N2")</td>
                                 <td class="text-end">—</td>
-                                <td class="text-end fw-medium">₹@balance.ToString("N2")</td>
+                                <td class="text-end fw-medium">₹@runningBalance.ToString("N2")</td>
                             </tr>
-                            balance -= s.Amount;
+                            runningBalance -= s.Amount;
                         }
                         <tr class="table-secondary">
                             <td colspan="4" class="text-end"><strong>Opening Balance</strong></td>
-                            <td class="text-end fw-bold">₹@balance.ToString("N2")</td>
+                            <td class="text-end fw-bold">₹@openingBalance.ToString("N2")</td>
                         </tr>
                     </tbody>
                 </table>
