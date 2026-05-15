@@ -337,45 +337,41 @@
         </header>
 
         <main class="main-content">
-            @if (TempData["Success"] != null)
-            {
-                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
-                    <div class="toast show border-0 shadow-lg" role="alert" data-bs-autohide="true" data-bs-delay="4000">
+            <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;" id="toastContainer">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="toast border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4000">
                         <div class="toast-header bg-success text-white">
                             <i class="bi bi-check-circle-fill me-2"></i>
                             <strong class="me-auto">Success</strong>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
                         <div class="toast-body">@TempData["Success"]</div>
                     </div>
-                </div>
-            }
-            @if (TempData["Error"] != null)
-            {
-                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
-                    <div class="toast show border-0 shadow-lg" role="alert" data-bs-autohide="true" data-bs-delay="5000">
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <div class="toast border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
                         <div class="toast-header bg-danger text-white">
                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
                             <strong class="me-auto">Error</strong>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
                         <div class="toast-body">@TempData["Error"]</div>
                     </div>
-                </div>
-            }
-            @if (TempData["Info"] != null)
-            {
-                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
-                    <div class="toast show border-0 shadow-lg" role="alert" data-bs-autohide="true" data-bs-delay="4000">
+                }
+                @if (TempData["Info"] != null)
+                {
+                    <div class="toast border-0 shadow-lg" role="alert" aria-live="polite" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4000">
                         <div class="toast-header bg-info text-white">
                             <i class="bi bi-info-circle-fill me-2"></i>
                             <strong class="me-auto">Info</strong>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
                         <div class="toast-body">@TempData["Info"]</div>
                     </div>
-                </div>
-            }
+                }
+            </div>
             @RenderBody()
         </main>
     </div>
@@ -408,10 +404,13 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.toast.show').forEach(function (el) {
-                var toast = new bootstrap.Toast(el, { delay: parseInt(el.dataset.bsDelay) || 4000 });
-                toast.show();
-            });
+            var container = document.getElementById('toastContainer');
+            if (container) {
+                container.querySelectorAll('.toast').forEach(function (el) {
+                    var toast = new bootstrap.Toast(el);
+                    toast.show();
+                });
+            }
         });
     </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
