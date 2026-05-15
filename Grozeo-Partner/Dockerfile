@@ -1,13 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 WORKDIR /src
 
-# Railway builds from repo root, so use full paths
-COPY Grozeo-Partner/RetalineProAgent.Net8/RetalineProAgent.csproj RetalineProAgent.Net8/
-COPY Grozeo-Partner/RetalineProAgent.Core/RetalineProAgent.Core.csproj RetalineProAgent.Core/
+COPY RetalineProAgent.Net8/RetalineProAgent.csproj RetalineProAgent.Net8/
+COPY RetalineProAgent.Core/RetalineProAgent.Core.csproj RetalineProAgent.Core/
 RUN dotnet restore RetalineProAgent.Net8/RetalineProAgent.csproj
 
-COPY Grozeo-Partner/RetalineProAgent.Net8/ RetalineProAgent.Net8/
-COPY Grozeo-Partner/RetalineProAgent.Core/ RetalineProAgent.Core/
+COPY RetalineProAgent.Net8/ RetalineProAgent.Net8/
+COPY RetalineProAgent.Core/ RetalineProAgent.Core/
 RUN dotnet publish RetalineProAgent.Net8/RetalineProAgent.csproj -c Release -o /app/publish --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS runtime
