@@ -12,7 +12,7 @@ public class UserService : IUserService
     {
         var user = await _db.QueryFirstOrDefaultAsync<AppUser>(
             "SELECT usr_id, usr_name, usr_email, usr_role, usr_branch_id, usr_password_hash " +
-            "FROM finascop_usr_master WHERE usr_email = @Email AND usr_status = 1",
+            "FROM grozeo_partner_users WHERE usr_email = @Email AND usr_status = 1",
             new { Email = email });
 
         if (user == null) return null;
@@ -25,11 +25,11 @@ public class UserService : IUserService
 
     public async Task<AppUser?> GetByIdAsync(int userId) =>
         await _db.QueryFirstOrDefaultAsync<AppUser>(
-            "SELECT * FROM finascop_usr_master WHERE usr_id = @Id",
+            "SELECT * FROM grozeo_partner_users WHERE usr_id = @Id",
             new { Id = userId });
 
     public async Task<IEnumerable<AppUser>> GetAllAsync(int branchId) =>
         await _db.QueryAsync<AppUser>(
-            "SELECT * FROM finascop_usr_master WHERE usr_branch_id = @BranchId AND usr_status = 1",
+            "SELECT * FROM grozeo_partner_users WHERE usr_branch_id = @BranchId AND usr_status = 1",
             new { BranchId = branchId });
 }

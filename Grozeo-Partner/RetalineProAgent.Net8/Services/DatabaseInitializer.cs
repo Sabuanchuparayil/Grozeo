@@ -6,6 +6,8 @@ namespace RetalineProAgent.Services;
 
 public static class DatabaseInitializer
 {
+    private const string PartnerTable = "grozeo_partner_users";
+
     public static async Task InitializeAsync(IConfiguration config, ILogger logger)
     {
         var connectionString =
@@ -23,9 +25,10 @@ public static class DatabaseInitializer
         {
             using IDbConnection conn = new MySqlConnection(connectionString);
             conn.Open();
+            logger.LogInformation("Database connection opened successfully for initialization");
 
-            await conn.ExecuteAsync(@"
-                CREATE TABLE IF NOT EXISTS finascop_usr_master (
+            await conn.ExecuteAsync($@"
+                CREATE TABLE IF NOT EXISTS {PartnerTable} (
                     usr_id          INT AUTO_INCREMENT PRIMARY KEY,
                     usr_name        VARCHAR(100)  NOT NULL,
                     usr_email       VARCHAR(200)  NOT NULL UNIQUE,
@@ -37,7 +40,7 @@ public static class DatabaseInitializer
                     usr_updated_at  DATETIME      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                 )");
 
-            logger.LogInformation("Ensuring default users exist in finascop_usr_master");
+            logger.LogInformation("Table {Table} ensured", PartnerTable);
 
             var defaultUsers = new[]
             {
@@ -50,18 +53,49 @@ public static class DatabaseInitializer
             foreach (var u in defaultUsers)
             {
                 var exists = await conn.ExecuteScalarAsync<int>(
-                    "SELECT COUNT(*) FROM finascop_usr_master WHERE usr_email = @Email",
+                    $"SELECT COUNT(*) FROM {PartnerTable} WHERE usr_email = @Email",
                     new { u.Email });
+
                 if (exists == 0)
                 {
                     var hash = BCrypt.Net.BCrypt.HashPassword(u.Password);
                     await conn.ExecuteAsync(
-                        @"INSERT INTO finascop_usr_master (usr_name, usr_email, usr_password_hash, usr_role, usr_branch_id, usr_status)
-                          VALUES (@Name, @Email, @Hash, @Role, 0, 1)",
+                        $@"INSERT INTO {PartnerTable} (usr_name, usr_email, usr_password_hash, usr_role, usr_branch_id, usr_status)
+                           VALUES (@Name, @Email, @Hash, @Role, 0, 1)",
                         new { u.Name, u.Email, Hash = hash, u.Role });
                     logger.LogInformation("Seeded user {Email} with role {Role}", u.Email, u.Role);
                 }
+                else
+                {
+                    var currentHash = await conn.ExecuteScalarAsync<string>(
+                        $"SELECT usr_password_hash FROM {PartnerTable} WHERE usr_email = @Email",
+                        new { u.Email });
+
+                    bool needsUpdate = string.IsNullOrEmpty(currentHash)
+                        || !currentHash.StartsWith("$2");
+
+                    if (!needsUpdate)
+                    {
+                        try { needsUpdate = !BCrypt.Net.BCrypt.Verify(u.Password, currentHash); }
+                        catch { needsUpdate = true; }
+                    }
+
+                    if (needsUpdate)
+                    {
+                        var hash = BCrypt.Net.BCrypt.HashPassword(u.Password);
+                        await conn.ExecuteAsync(
+                            $"UPDATE {PartnerTable} SET usr_password_hash = @Hash WHERE usr_email = @Email",
+                            new { Hash = hash, u.Email });
+                        logger.LogInformation("Reset password hash for {Email}", u.Email);
+                    }
+                    else
+                    {
+                        logger.LogInformation("User {Email} already exists with valid hash", u.Email);
+                    }
+                }
             }
+
+            logger.LogInformation("Database initialization completed successfully");
         }
         catch (Exception ex)
         {

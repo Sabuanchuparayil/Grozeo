@@ -1,0 +1,9 @@
+.git
+.gitignore
+.do
+README.md
+azure-pipelines.yml
+db/
+logs/
+*.log
+.DS_Store

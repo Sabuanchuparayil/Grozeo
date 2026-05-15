@@ -29,7 +29,7 @@ public class UserController : Controller
             {
                 var pattern = $"%{q.Trim()}%";
                 users = await _db.QueryAsync<AppUser>(
-                    @"SELECT * FROM finascop_usr_master 
+                    @"SELECT * FROM grozeo_partner_users 
                       WHERE usr_name LIKE @Pattern OR usr_email LIKE @Pattern 
                       ORDER BY usr_id",
                     new { Pattern = pattern });
@@ -38,7 +38,7 @@ public class UserController : Controller
             else
             {
                 users = await _db.QueryAsync<AppUser>(
-                    "SELECT * FROM finascop_usr_master ORDER BY usr_id");
+                    "SELECT * FROM grozeo_partner_users ORDER BY usr_id");
             }
 
             return View(users);
@@ -77,7 +77,7 @@ public class UserController : Controller
         try
         {
             var existing = await _db.QueryFirstOrDefaultAsync<AppUser>(
-                "SELECT * FROM finascop_usr_master WHERE usr_email = @Email",
+                "SELECT * FROM grozeo_partner_users WHERE usr_email = @Email",
                 new { Email = usr_email });
 
             if (existing != null)
@@ -89,7 +89,7 @@ public class UserController : Controller
             var hash = BCrypt.Net.BCrypt.HashPassword(password);
 
             await _db.ExecuteAsync(
-                @"INSERT INTO finascop_usr_master 
+                @"INSERT INTO grozeo_partner_users 
                   (usr_name, usr_email, usr_password_hash, usr_role, usr_branch_id, usr_status, usr_created_at, usr_updated_at) 
                   VALUES (@Name, @Email, @Hash, @Role, @BranchId, @Status, NOW(), NOW())",
                 new
@@ -121,7 +121,7 @@ public class UserController : Controller
         try
         {
             var user = await _db.QueryFirstOrDefaultAsync<AppUser>(
-                "SELECT * FROM finascop_usr_master WHERE usr_id = @Id",
+                "SELECT * FROM grozeo_partner_users WHERE usr_id = @Id",
                 new { Id = id.Value });
 
             if (user == null)
@@ -149,7 +149,7 @@ public class UserController : Controller
         {
             ViewBag.Error = "Name and email are required.";
             var user = await _db.QueryFirstOrDefaultAsync<AppUser>(
-                "SELECT * FROM finascop_usr_master WHERE usr_id = @Id", new { Id = usr_id });
+                "SELECT * FROM grozeo_partner_users WHERE usr_id = @Id", new { Id = usr_id });
             return View(user);
         }
 
@@ -157,7 +157,7 @@ public class UserController : Controller
         {
             ViewBag.Error = "Passwords do not match.";
             var user = await _db.QueryFirstOrDefaultAsync<AppUser>(
-                "SELECT * FROM finascop_usr_master WHERE usr_id = @Id", new { Id = usr_id });
+                "SELECT * FROM grozeo_partner_users WHERE usr_id = @Id", new { Id = usr_id });
             return View(user);
         }
 
@@ -167,7 +167,7 @@ public class UserController : Controller
             {
                 var hash = BCrypt.Net.BCrypt.HashPassword(password);
                 await _db.ExecuteAsync(
-                    @"UPDATE finascop_usr_master 
+                    @"UPDATE grozeo_partner_users 
                       SET usr_name = @Name, usr_email = @Email, usr_password_hash = @Hash, 
                           usr_role = @Role, usr_branch_id = @BranchId, usr_status = @Status, usr_updated_at = NOW()
                       WHERE usr_id = @Id",
@@ -176,7 +176,7 @@ public class UserController : Controller
             else
             {
                 await _db.ExecuteAsync(
-                    @"UPDATE finascop_usr_master 
+                    @"UPDATE grozeo_partner_users 
                       SET usr_name = @Name, usr_email = @Email, usr_role = @Role, 
                           usr_branch_id = @BranchId, usr_status = @Status, usr_updated_at = NOW()
                       WHERE usr_id = @Id",
@@ -191,7 +191,7 @@ public class UserController : Controller
             _logger.LogError(ex, "Failed to update user {UserId}", usr_id);
             ViewBag.Error = "An error occurred while updating the user.";
             var user = await _db.QueryFirstOrDefaultAsync<AppUser>(
-                "SELECT * FROM finascop_usr_master WHERE usr_id = @Id", new { Id = usr_id });
+                "SELECT * FROM grozeo_partner_users WHERE usr_id = @Id", new { Id = usr_id });
             return View(user);
         }
     }

@@ -29,11 +29,11 @@ public class DashboardController : Controller
         try
         {
             var totalUsers = await _db.QueryFirstOrDefaultAsync<int>(
-                "SELECT COUNT(*) FROM finascop_usr_master");
+                "SELECT COUNT(*) FROM grozeo_partner_users");
             ViewBag.TotalUsers = totalUsers > 0 ? totalUsers : 5;
 
             var activeUsers = await _db.QueryFirstOrDefaultAsync<int>(
-                "SELECT COUNT(*) FROM finascop_usr_master WHERE usr_status = 1");
+                "SELECT COUNT(*) FROM grozeo_partner_users WHERE usr_status = 1");
             ViewBag.ActiveUsers = activeUsers > 0 ? activeUsers : 4;
         }
         catch
