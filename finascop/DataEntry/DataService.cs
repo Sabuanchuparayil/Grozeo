@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-using Azure;
 using Newtonsoft.Json;
 
 namespace DataEntry

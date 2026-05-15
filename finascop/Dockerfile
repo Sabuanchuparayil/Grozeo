@@ -16,8 +16,11 @@ RUN apk add --no-cache curl
 
 COPY --from=build /app/publish .
 
-ENV AzureWebJobsStorage=""
-ENV FUNCTIONS_WORKER_RUNTIME=dotnet
-EXPOSE 80
+ENV ASPNETCORE_ENVIRONMENT=Production
 
-CMD ["dotnet", "DataEntry.dll"]
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8080}/health || exit 1
+
+ENTRYPOINT ["sh", "-c", "exec dotnet DataEntry.dll --urls http://+:${PORT:-8080}"]

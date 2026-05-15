@@ -18,16 +18,15 @@ RUN echo '<Directory /var/www/html>\n\
 WORKDIR /var/www/html
 COPY . .
 
-RUN chown -R www-data:www-data /var/www/html \
+RUN mkdir -p /var/www/html/logs \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-ENV APACHE_PORT=80
-RUN sed -i "s/Listen 80/Listen \${APACHE_PORT}/" /etc/apache2/ports.conf \
-    && sed -i "s/:80/:${APACHE_PORT}/" /etc/apache2/sites-available/000-default.conf
+EXPOSE 8080
 
-EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8080}/?module=health || exit 1
 
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD curl -f http://localhost:${APACHE_PORT}/ || exit 1
-
-CMD ["apache2-foreground"]
+CMD sed -i "s/Listen 80/Listen ${PORT:-8080}/" /etc/apache2/ports.conf \
+    && sed -i "s/:80/:${PORT:-8080}/" /etc/apache2/sites-available/000-default.conf \
+    && apache2-foreground

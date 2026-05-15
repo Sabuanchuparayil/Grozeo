@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
@@ -11,15 +9,13 @@ namespace DataEntry
 {
     public class FinascopAudit
     {
-        [FunctionName("FinascopAudit")]
-        public void Run([TimerTrigger("0 5 0 * * *")]TimerInfo myTimer, ILogger log)
+        public void Run(ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function: FinascopAudit executed at: {DateTime.Now}");
+            log.LogInformation($"FinascopAudit executed at: {DateTime.Now}");
 
             var yesterday = DateTime.Today.AddDays(-1);
             var today = DateTime.Today;
 
-            // get all storeRefId of all the stores that were successfully created yesterday
             string sql = $"SELECT store_group_id, storeRefId FROM finascop_branch_group WHERE created_on >= @yesterday AND created_on < @today";
             List<KeyValuePair<string, object>> prms = new List<KeyValuePair<string, object>>();
             prms.Add(new KeyValuePair<string, object>("yesterday", yesterday));
@@ -31,16 +27,13 @@ namespace DataEntry
 
                 foreach (DataRow newBranch in newBranches.Rows)
                 {
-                    // check the case whether the finascop_branch_group has refId entered.
                     string storeRefId = newBranch.Field<string>("storeRefId");
                     if (String.IsNullOrEmpty(storeRefId))
                     {
-                        //get the ledger with the expected Name
                         int store_group_id = newBranch.Field<int>("store_group_id");
                         string ledNameQry = $"SELECT CONCAT(br_Name,'_',br_Phone) as LedgerName FROM finascop_branch WHERE br_storeGroup = @store_group_id";
                         List<KeyValuePair<string, object>> brprms = new List<KeyValuePair<string, object>>();
                         brprms.Add(new KeyValuePair<string, object>("store_group_id", store_group_id));
-                        //ExecuteScalar(string sql, string sqlconnection, List<KeyValuePair<String, Object>> parmeters = null, bool isSP=false)
                         var res = DataServiceMySql.ExecuteScalar(ledNameQry, "", parmeters: brprms);
                         String ledger_Name = System.Convert.ToString(res);
 
@@ -50,8 +43,6 @@ namespace DataEntry
                         lriprms.Add(new KeyValuePair<string, object>("ledgeName", ledger_Name));
                         var refId = DataService.ExecuteScalar(sqlLedgerrRefId, parmeters: lriprms);
                         string ledgerRefId = System.Convert.ToString(refId);
-
-                        //check whether the log has already a failure entry of the corresponding ledger creation
 
                         string sqlLogEntryCheck = $"SELECT id FROM [finascop_log] WHERE entry_RefId = @ledRefId";
                         List<KeyValuePair<string, object>> lecprms = new List<KeyValuePair<string, object>>();
