@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace RetalineProAgent.Areas.Tenant.Controllers;
 
 [Area("Tenant")]
-[Authorize(Policy = "TenantAdmin")]
+[Authorize]
 public class DeliveryController : Controller
 {
     public IActionResult Index(int? id) => View();

@@ -6,7 +6,7 @@ using RetalineProAgent.Services;
 namespace RetalineProAgent.Areas.Tenant.Controllers;
 
 [Area("Tenant")]
-[Authorize(Policy = "TenantAdmin")]
+[Authorize]
 public class ProductController : Controller
 {
     public IActionResult Index(int? id, string? status)

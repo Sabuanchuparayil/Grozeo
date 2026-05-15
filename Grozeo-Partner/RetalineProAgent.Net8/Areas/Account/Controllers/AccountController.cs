@@ -74,7 +74,12 @@ public class AccountController : Controller
         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             return Redirect(returnUrl);
 
-        return RedirectToAction("Index", "Dashboard", new { area = "Tenant" });
+        return user.usr_role switch
+        {
+            "Finance" => RedirectToAction("Index", "Settlement", new { area = "Finance" }),
+            "Support" => RedirectToAction("Index", "Ticket", new { area = "Support" }),
+            _         => RedirectToAction("Index", "Dashboard", new { area = "Tenant" }),
+        };
     }
 
     [HttpPost]
